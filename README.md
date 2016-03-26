@@ -41,3 +41,8 @@ Dodatkowo:
 ###### *3. Dodatek:*
  * inna forma kopiowania plików (zamiast read/write): mmap/write (mapowanie w całości w pamięci)
  * próg dzielący pliki małe od dużych: dodatkowy opcjonalny parametr
+
+
+### Lista TO-DO:
+ * konwersja z tablicy char (string) do integera, w celu przypisania do globalnej flagi "refresh_time" i "prog_podzialu"
+ 
