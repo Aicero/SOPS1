@@ -9,21 +9,24 @@
 #include <string.h>
 
 int rekurencyjne = 0;
-int refreshtime = 5;
+int refreshtime = 5; // 5min * 60sec = 300
 int prog_podzialu = 0;
+
+
+int logger(char* message);
 
 int main(int argc, char * argv[]) {
 
 	struct stat sb;
-	
+
 	int zrodlowy = (stat(argv[1], &sb) == 0 && S_ISDIR(sb.st_mode));
 	int docelowy = (stat(argv[2], &sb) == 0 && S_ISDIR(sb.st_mode));
-	
-	if(!zrodlowy || !docelowy){
-		fprintf(stderr, "%s nie jest katalogiem, lub nie istnieje.\n", zrodlowy? argv[2] :  argv[1]);
+
+	if (!zrodlowy || !docelowy) {
+		fprintf(stderr, "%s nie jest katalogiem, lub nie istnieje.\n", zrodlowy ? argv[2] : argv[1]);
 		exit(EXIT_FAILURE);
 	}
-	
+
 	if (zrodlowy && docelowy) {
 		printf("obie sciezki prowadza do katalogow\n\n");
 		int i;
@@ -32,13 +35,13 @@ int main(int argc, char * argv[]) {
 				rekurencyjne = 1;
 			}
 			else if (strcmp(argv[i], "-T") == 0) {
-				if(sscanf(argv[i + 1], "%i", &refreshtime) !=1){
+				if (sscanf(argv[i + 1], "%i", &refreshtime) != 1) {
 					printf("\nPodano bledny czas spania.\n"); //
 					exit(EXIT_FAILURE);
 				}
 			}
 			else if (strcmp(argv[i], "-S") == 0) {
-				if(sscanf(argv[i + 1], "%i", &prog_podzialu) !=1){
+				if (sscanf(argv[i + 1], "%i", &prog_podzialu) != 1) {
 					printf("\nPodano bledny prog.\n");
 					exit(EXIT_FAILURE);
 				}
@@ -48,10 +51,10 @@ int main(int argc, char * argv[]) {
 		printf("rek %d\n", rekurencyjne);
 		printf("reftime %d\n", refreshtime);
 		printf("prog %d\n", prog_podzialu);
-		exit(EXIT_SUCCESS); // zakonczenie programu przed forkowaniem - tylko do testów
+		//exit(EXIT_SUCCESS); // zakonczenie programu przed forkowaniem - tylko do testow
 
 
-	/* Our process ID and Session ID */
+		/* Our process ID and Session ID */
 		pid_t pid, sid;
 
 		/* Fork off the parent process */
@@ -69,6 +72,15 @@ int main(int argc, char * argv[]) {
 		umask(0);
 
 		/* Open any logs here */
+		setlogmask(LOG_UPTO(LOG_INFO));
+
+		openlog("SOPS1-demon", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
+
+		syslog(LOG_NOTICE, "Program uruchomiony przez uzytkownika %d", getuid());
+
+		//closelog (); // zamkniecie logow
+		//exit(EXIT_SUCCESS); // zakonczenie programu przed forkowaniem - tylko do testow
+
 
 		/* Create a new SID for the child process */
 		sid = setsid();
@@ -94,10 +106,19 @@ int main(int argc, char * argv[]) {
 
 		/* The Big Loop */
 		while (1) {
-			/* Do some task here ... */
+			logger("Demon zostal wybudzony automatycznie.");
 
-			sleep(2); /* wait 30 seconds */
+			// tutaj wlasciwe dzialanie demona
+
+			logger("Demon zostal uspiony.");
+			sleep(refreshtime); /* uspienie procesu */
 		}
+
+		//closelog (); // zamkniecie logow
 		exit(EXIT_SUCCESS);
 	}
+}
+
+int logger(char* message) {
+	syslog(LOG_INFO, message);
 }
