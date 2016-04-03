@@ -21,11 +21,12 @@ int main(int argc, char * argv[]) {
 	int docelowy = (stat(argv[2], &sb) == 0 && S_ISDIR(sb.st_mode));
 	
 	if(!zrodlowy){
-		printf("Bledny katalog zrodlowy!\n");
+		printf("Bledny katalog zrodlowy!\n");//tutaj dodac blad
 		exit(EXIT_FAILURE);
 	}
 	
 	if(!docelowy)
+	if(!docelowy)//tutaj dodac blad zwykly zamiast dodawania folderu
 	{
 		printf("%s nie jest katalogiem, czy utworzyć nowy katalog? y/n\n", argv[2]);
 		int c_Confirm = getchar();
@@ -53,12 +54,16 @@ int main(int argc, char * argv[]) {
 				g_iRecurrency = 1;
 			}
 			else if (strcmp(argv[i], "-T") == 0) {
-				printf("jest -T %s\n", argv[i + 1]); // to sie buguje
-				sscanf(argv[i + 1], "%i", &g_iRefreshTime);
+				if(sscanf(argv[i + 1], "%i", &g_iRefreshTime) !=1){
+					printf("\nPodano bledny czas spania.\n"); //
+					exit(EXIT_FAILURE);
+				}
 			}
 			else if (strcmp(argv[i], "-S") == 0) {
-				printf("jest -S %s\n", argv[i + 1]); // to sie buguje
-				//g_iSize_treshold = argv[i + 1];
+				if(sscanf(argv[i + 1], "%i", &g_iSize_treshold) !=1){
+					printf("\nPodano bledny prog.\n");
+					exit(EXIT_FAILURE);
+				}
 			}
 		}
 
@@ -116,10 +121,5 @@ int main(int argc, char * argv[]) {
 			sleep(2); /* wait 30 seconds */
 		}
 		exit(EXIT_SUCCESS);
-	}
-	else {
-		printf("\nktoras sciezka okazala sie nie byc katalogiem\n");
-		printf("TO JEST KOD BLEDU ... KTORY TRZEBA EDYTOWAC\n\n");
-		exit(EXIT_FAILURE);
 	}
 }
