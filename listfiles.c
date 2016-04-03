@@ -1,5 +1,5 @@
 /*
-Wypisywanie listy plikï¿½w dostepnych w folderze podanym jako argument.
+Wypisywanie listy plików dostepnych w folderze podanym jako argument.
 */
 
 #include <stdio.h>
@@ -15,6 +15,21 @@ void listfiles (char * folder)
   if (dp != NULL)
     {
       while (ep = readdir (dp))
+	    if(!strcmp(ep->d_name,".") || !strcmp(ep->d_name,".."))
+		{
+			//Katalogi specjalne, nie powinno nic robic. 
+		}
+		else
+		{
+			if(ep->d_type == DT_DIR)
+			{
+				//Katalog
+			}
+			else
+			{
+				//Plik
+			}
+		}
       (void) closedir (dp);
     }
   else
