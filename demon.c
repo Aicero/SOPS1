@@ -9,9 +9,9 @@
 #include <string.h>
 #include <sys/stat.h>
 
-int rekurencyjne = 0;
-int refreshtime = 5;
-int prog_podzialu = 0;
+int g_iRecurrency = 0;
+int g_iRefreshTime = 5;
+int g_iSize_treshold = 0;
 
 int main(int argc, char * argv[]) {
 
