@@ -7,41 +7,47 @@
 #include <unistd.h>
 #include <syslog.h>
 #include <string.h>
-#include <sys/stat.h>
 
-int rekurencyjne = 0;
-int refreshtime = 5;
-int prog_podzialu = 0;
+int g_iRecurrency = 0;
+int g_iRefreshTime = 5;
+int g_iSize_treshold = 0; // można zamienić na size_t
 
 int main(int argc, char * argv[]) {
 
 	struct stat sb;
+	
 	int zrodlowy = (stat(argv[1], &sb) == 0 && S_ISDIR(sb.st_mode));
 	int docelowy = (stat(argv[2], &sb) == 0 && S_ISDIR(sb.st_mode));
-
+	
+	if(!zrodlowy || !docelowy){
+		fprintf(stderr, "%s nie jest katalogiem, lub nie istnieje.\n", zrodlowy? argv[2] :  argv[1]);
+		exit(EXIT_FAILURE);
+	}
+	
 	if (zrodlowy && docelowy) {
 		printf("obie sciezki prowadza do katalogow\n\n");
 		int i;
 		for (i = 3; i < argc; i++) {
-			//printf("%s\n\n", argv[i]);
-
-
 			if (strcmp(argv[i], "-R") == 0) {
-				rekurencyjne = 1;
+				g_iRecurrency = 1;
 			}
 			else if (strcmp(argv[i], "-T") == 0) {
-				printf("jest -T %s\n", argv[i + 1]); // to sie buguje
-				refreshtime = argv[i + 1];
+				if(sscanf(argv[i + 1], "%i", &g_iRefreshTime) !=1){
+					printf("\nPodano bledny czas spania.\n"); //
+					exit(EXIT_FAILURE);
+				}
 			}
 			else if (strcmp(argv[i], "-S") == 0) {
-				printf("jest -S %s\n", argv[i + 1]); // to sie buguje
-				prog_podzialu = argv[i + 1];
+				if(sscanf(argv[i + 1], "%i", &g_iSize_treshold) !=1){
+					printf("\nPodano bledny prog.\n");
+					exit(EXIT_FAILURE);
+				}
 			}
 		}
 
-		printf("rek %d\n", rekurencyjne);
-		printf("reftime %d\n", refreshtime);
-		printf("prog %d\n", prog_podzialu);
+		printf("rek %d\n", g_iRecurrency);
+		printf("reftime %d\n", g_iRefreshTime);
+		printf("prog %d\n", g_iSize_treshold);
 		exit(EXIT_SUCCESS); // zakonczenie programu przed forkowaniem - tylko do testów
 
 
@@ -93,10 +99,5 @@ int main(int argc, char * argv[]) {
 			sleep(2); /* wait 30 seconds */
 		}
 		exit(EXIT_SUCCESS);
-	}
-	else {
-		printf("ktoras sciezka okazala sie nie byc katalogiem\n");
-		printf("TO JEST KOD BLEDU ... KTORY TRZEBA EDYTOWAC\n\n");
-		exit(EXIT_FAILURE);
 	}
 }

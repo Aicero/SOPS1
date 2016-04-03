@@ -1,0 +1,4 @@
+/*
+Kopiowanie plików uzywajac mmap
+*/
+
