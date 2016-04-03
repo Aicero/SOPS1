@@ -8,9 +8,9 @@
 #include <syslog.h>
 #include <string.h>
 
-int g_iRecurrency = 0;
-int g_iRefreshTime = 5;
-int g_iSize_treshold = 0; // można zamienić na size_t
+int rekurencyjne = 0;
+int refreshtime = 5;
+int prog_podzialu = 0;
 
 int main(int argc, char * argv[]) {
 
@@ -29,25 +29,25 @@ int main(int argc, char * argv[]) {
 		int i;
 		for (i = 3; i < argc; i++) {
 			if (strcmp(argv[i], "-R") == 0) {
-				g_iRecurrency = 1;
+				rekurencyjne = 1;
 			}
 			else if (strcmp(argv[i], "-T") == 0) {
-				if(sscanf(argv[i + 1], "%i", &g_iRefreshTime) !=1){
+				if(sscanf(argv[i + 1], "%i", &refreshtime) !=1){
 					printf("\nPodano bledny czas spania.\n"); //
 					exit(EXIT_FAILURE);
 				}
 			}
 			else if (strcmp(argv[i], "-S") == 0) {
-				if(sscanf(argv[i + 1], "%i", &g_iSize_treshold) !=1){
+				if(sscanf(argv[i + 1], "%i", &prog_podzialu) !=1){
 					printf("\nPodano bledny prog.\n");
 					exit(EXIT_FAILURE);
 				}
 			}
 		}
 
-		printf("rek %d\n", g_iRecurrency);
-		printf("reftime %d\n", g_iRefreshTime);
-		printf("prog %d\n", g_iSize_treshold);
+		printf("rek %d\n", rekurencyjne);
+		printf("reftime %d\n", refreshtime);
+		printf("prog %d\n", prog_podzialu);
 		exit(EXIT_SUCCESS); // zakonczenie programu przed forkowaniem - tylko do testów
 
 
