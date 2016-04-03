@@ -7,11 +7,10 @@
 #include <unistd.h>
 #include <syslog.h>
 #include <string.h>
-#include <sys/stat.h>
 
 int g_iRecurrency = 0;
 int g_iRefreshTime = 5;
-int g_iSize_treshold = 0;
+int g_iSize_treshold = 0; // można zamienić na size_t
 
 int main(int argc, char * argv[]) {
 
@@ -20,30 +19,9 @@ int main(int argc, char * argv[]) {
 	int zrodlowy = (stat(argv[1], &sb) == 0 && S_ISDIR(sb.st_mode));
 	int docelowy = (stat(argv[2], &sb) == 0 && S_ISDIR(sb.st_mode));
 	
-	if(!zrodlowy){
-		printf("Bledny katalog zrodlowy!\n");//tutaj dodac blad
+	if(!zrodlowy || !docelowy){
+		fprintf(stderr, "%s nie jest katalogiem, lub nie istnieje.\n", zrodlowy? argv[2] :  argv[1]);
 		exit(EXIT_FAILURE);
-	}
-	
-	if(!docelowy)
-	if(!docelowy)//tutaj dodac blad zwykly zamiast dodawania folderu
-	{
-		printf("%s nie jest katalogiem, czy utworzyć nowy katalog? y/n\n", argv[2]);
-		int c_Confirm = getchar();
-		switch(c_Confirm){
-			case 'y':
-				mkdir(argv[2], 777);
-				printf("\n Dodano katalog %s\n", argv[2]);
-				docelowy = (stat(argv[2], &sb) == 0 && S_ISDIR(sb.st_mode));
-				break;
-			case 'n':
-				printf("Nie dodano katalogu docelowego.\n");
-				exit(EXIT_FAILURE);
-				break;
-			default:
-				printf("Czy utworzyc nowy katalog? y/n");
-				break;
-		}
 	}
 	
 	if (zrodlowy && docelowy) {
