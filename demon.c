@@ -120,5 +120,5 @@ int main(int argc, char * argv[]) {
 }
 
 int logger(char* message) {
-	syslog(LOG_INFO, message);
+	syslog(LOG_INFO, "%s", message);
 }
