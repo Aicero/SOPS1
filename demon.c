@@ -28,7 +28,12 @@ int main(int argc, char * argv[]) {
 		fprintf(stderr, "%s nie jest katalogiem, lub nie istnieje.\n", zrodlowy ? argv[2] : argv[1]);
 		exit(EXIT_FAILURE);
 	}
-
+	
+	//Przypisuje adres katalogu docelowego i źródłowego
+	realpath(argv[1],pathZrodlowy);
+	realpath(argv[2],pathDocelowy);
+	printf("\n %s \n %s \n", pathZrodlowy, pathDocelowy);
+	
 	if (zrodlowy && docelowy) {
 		printf("obie sciezki prowadza do katalogow\n\n");
 		int i;
