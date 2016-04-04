@@ -10,14 +10,12 @@
 #include <string.h>
 #include <dirent.h>
 
-int rekurencyjne = 0;
-int refreshtime = 5; // 5min * 60sec = 300
-int prog_podzialu = 0;
+#include "globals.c"
+#include "listfiles.c"
+#include "logger.c"
+#include "checkFile.c"
+#include "signalhandler.c"
 
-void logger(char* message);
-void signalhandler(int signum);
-void listfiles (char *folder, char *path);
-int checkFile(char *plik);
 
 int main(int argc, char * argv[]) {
 
@@ -52,10 +50,6 @@ int main(int argc, char * argv[]) {
 			}
 		}
 
-		//printf("rek %d\n", rekurencyjne);
-		//printf("reftime %d\n", refreshtime);
-		//printf("prog %d\n", prog_podzialu);
-
 		signal(SIGTERM, signalhandler);
 		signal(SIGUSR1, signalhandler);
 
@@ -80,14 +74,11 @@ int main(int argc, char * argv[]) {
 		/* Open any logs here */
 		setlogmask(LOG_UPTO(LOG_INFO));
 		openlog("SOPS1-demon", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
-		//syslog(LOG_NOTICE, "Program uruchomiony przez uzytkownika %d", getuid());
-
-		//exit(EXIT_SUCCESS); // zakonczenie programu przed forkowaniem - tylko do testow
+		syslog(LOG_NOTICE, "Program uruchomiony przez uzytkownika %d", getuid());
 
 		/* Create a new SID for the child process */
 		sid = setsid();
 		if (sid < 0) {
-			/* Log the failure */
 			exit(EXIT_FAILURE);
 		}
 
@@ -99,8 +90,8 @@ int main(int argc, char * argv[]) {
 
 		/* Close out the standard file descriptors */
 		close(STDIN_FILENO);
-		//close(STDOUT_FILENO);
-		//close(STDERR_FILENO);
+		close(STDOUT_FILENO);
+		close(STDERR_FILENO);
 
 		/* Daemon-specific initialization goes here */
 
@@ -113,107 +104,8 @@ int main(int argc, char * argv[]) {
 			logger("Demon zostal uspiony.");
 			sleep(refreshtime); /* uspienie procesu */
 		}
-
-		//closelog (); // zamkniecie logow
 		exit(EXIT_SUCCESS);
 	}
-}
-
-void logger(char* message) {
-	//syslog(LOG_INFO, "%s", message);
-	fprintf(stderr, "\n%s", message);
-}
-
-void signalhandler(int signum) {
-	if (signum == SIGTERM) {
-		closelog(); // zamkniecie logow
-		logger("Zakonczono dzialanie demona. [kill]");
-		exit(signum);
-	}
-	else if (signum == SIGUSR1) {
-		// wywolanie metody synchronizujacej katalogi
-		logger("Demon wybudzony przez SIGUSR1.");
-		sleep(refreshtime); /* uspienie procesu */
-	}
-}
-
-void listfiles (char *folder, char *path)
-{
-  DIR *dp;
-  struct dirent *ep;
-
-  dp = opendir (folder);
-  if (dp != NULL)
-    {
-      while (ep = readdir (dp))
-	    if(!strcmp(ep->d_name,".") || !strcmp(ep->d_name,".."))
-		{
-			//Katalogi specjalne, nie powinno nic robic.
-			//Można dodać pomijanie katalogów i plików ukrytych (ep-d_name[0] != '.')
-		}
-		else
-		{
-			if(ep->d_type == DT_DIR)
-			{
-				//Katalog 
-				// jeżeli rekurencja: 
-				//czy katalog istenieje w docelowym? jeżeli nie --> tworzę katalog w docelowym
-				//odpalam listfiles rekurencyjnie w katalogu (istniejącym już lub przed chwilą utworzonym)
-			}
-			else if (ep->d_type == DT_REG)
-			{
-				if(stat(ep->d_name, &file1) == 0) {
-				}
-				if ((chdir(path)) < 0) {
-					/* Log the failure */
-					exit(EXIT_FAILURE);
-				}
-				FILE *fp = fopen(ep->d_name, "rw");
-				if(!fp) {
-					logger(ep->d_name);
-					logger("brak pliku w drugim folderze\n");
-				}
-				else
-				{
-					logger(ep->d_name);
-					logger("plik jest w drugim folderze\n");
-
-					struct stat file1;
-					struct stat file2;
-					if (stat(fp->, &file2) == 0 && stat(ep->d_name, &file1) == 0) {
-						logger("stated");
-    					}
-				}
-				//logger(ep->d_name);
-				chdir("..");
-
-				if ((chdir(folder)) < 0) {
-					/* Log the failure */
-					exit(EXIT_FAILURE);
-				}
-				
-				chdir("..");
-			}
-			else
-			{
-				logger("Natrafiono na inny plik");
-			}
-		}
-      (void) closedir (dp);
-    }
-  else
-    perror ("Nie mozna otworzyc katalogu");
-}
-
-int checkFile(char * plik) {
-
-	// zwraca: 0 - pliki takie same (wazna data ostatniej modyfikacji)
-	// zwraca: 1 - pliki różne -> aktualizacja
-	// zwraca: -1 - plik nie istnieje -> tworzenie i kopia
-
-	//sprawdza czy plik istnieje w katalogu docelowym.
-	//if(istnieje) { return 1; }
-	//else{ return 0; }
 }
 
 //Funkcja sprawdzająca nadmiar w katalogu docelowym --> 
