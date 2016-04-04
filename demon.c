@@ -8,15 +8,14 @@
 #include <unistd.h>
 #include <syslog.h>
 #include <string.h>
+#include <dirent.h>
 
-int rekurencyjne = 0;
-int refreshtime = 5; // 5min * 60sec = 300
-int prog_podzialu = 0;
+#include "globals.c"
+#include "listfiles.c"
+#include "logger.c"
+#include "checkFile.c"
+#include "signalhandler.c"
 
-int logger(char* message);
-void signalhandler(int signum);
-void listfiles (char * folder);
-int checkFile(char * plik){
 
 int main(int argc, char * argv[]) {
 
@@ -51,10 +50,6 @@ int main(int argc, char * argv[]) {
 			}
 		}
 
-		printf("rek %d\n", rekurencyjne);
-		printf("reftime %d\n", refreshtime);
-		printf("prog %d\n", prog_podzialu);
-
 		signal(SIGTERM, signalhandler);
 		signal(SIGUSR1, signalhandler);
 
@@ -81,20 +76,17 @@ int main(int argc, char * argv[]) {
 		openlog("SOPS1-demon", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
 		syslog(LOG_NOTICE, "Program uruchomiony przez uzytkownika %d", getuid());
 
-		//exit(EXIT_SUCCESS); // zakonczenie programu przed forkowaniem - tylko do testow
-
 		/* Create a new SID for the child process */
 		sid = setsid();
 		if (sid < 0) {
-			/* Log the failure */
 			exit(EXIT_FAILURE);
 		}
 
-		/* Change the current working directory */
-		if ((chdir("/")) < 0) {
+		/* Change the current working directory - przyda sie w rekurencji!!!!!! */
+		//if ((chdir("/")) < 0) {
 			/* Log the failure */
-			exit(EXIT_FAILURE);
-		}
+		//	exit(EXIT_FAILURE);
+		//}
 
 		/* Close out the standard file descriptors */
 		close(STDIN_FILENO);
@@ -108,71 +100,12 @@ int main(int argc, char * argv[]) {
 			logger("Demon zostal wybudzony automatycznie.");
 			// tutaj wlasciwe dzialanie demona
 
+			listfiles(argv[1], argv[2]);
 			logger("Demon zostal uspiony.");
 			sleep(refreshtime); /* uspienie procesu */
 		}
-
-		//closelog (); // zamkniecie logow
 		exit(EXIT_SUCCESS);
 	}
-}
-
-int logger(char* message) {
-	syslog(LOG_INFO, "%s", message);
-}
-
-void signalhandler(int signum) {
-	if (signum == SIGTERM) {
-		closelog(); // zamkniecie logow
-		logger("Zakonczono dzialanie demona. [kill]");
-		exit(signum);
-	}
-	else if (signum == SIGUSR1) {
-		// wywolanie metody synchronizujacej katalogi
-		logger("Demon wybudzony przez SIGUSR1.");
-		sleep(refreshtime); /* uspienie procesu */
-	}
-}
-
-void listfiles (char * folder)
-{
-  DIR *dp;
-  struct dirent *ep;
-
-  dp = opendir (folder);
-  if (dp != NULL)
-    {
-      while (ep = readdir (dp))
-	    if(!strcmp(ep->d_name,".") || !strcmp(ep->d_name,".."))
-		{
-			//Katalogi specjalne, nie powinno nic robic.
-			//Można dodać pomijanie katalogów i plików ukrytych (ep-d_name[0] != '.')
-		}
-		else
-		{
-			if(ep->d_type == DT_DIR)
-			{
-				//Katalog 
-				// jeżeli rekurencja: 
-				//czy katalog istenieje w docelowym? jeżeli nie --> tworzę katalog w docelowym
-				//odpalam listfiles rekurencyjnie w katalogu (istniejącym już lub przed chwilą utworzonym)
-			}
-			else
-			{
-				//if(checkFile(ep->d_name)) --> jeżeli plik istnieje w katalogu docelowym, porównujemy
-				//else --> jeżeli plik nie istnieje w katalogu docelowym, kopiujemy.
-			}
-		}
-      (void) closedir (dp);
-    }
-  else
-    perror ("Nie mozna otworzyc katalogu");
-}
-
-int checkFile(char * plik){
-	//sprawdza czy plik istnieje w katalogu docelowym.
-	//if(istnieje) { return 1; }
-	//else{ return 0; }
 }
 
 //Funkcja sprawdzająca nadmiar w katalogu docelowym --> 
