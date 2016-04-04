@@ -16,13 +16,8 @@ int prog_podzialu = 0;
 
 void logger(char* message);
 void signalhandler(int signum);
-<<<<<<< HEAD
 void listfiles (char *folder, char *path);
 int checkFile(char *plik);
-=======
-void listfiles (char * folder);
-int checkFile(char * plik){
->>>>>>> refs/remotes/origin/master
 
 int main(int argc, char * argv[]) {
 
@@ -142,11 +137,7 @@ void signalhandler(int signum) {
 	}
 }
 
-<<<<<<< HEAD
 void listfiles (char *folder, char *path)
-=======
-void listfiles (char * folder)
->>>>>>> refs/remotes/origin/master
 {
   DIR *dp;
   struct dirent *ep;
@@ -169,7 +160,6 @@ void listfiles (char * folder)
 				//czy katalog istenieje w docelowym? jeżeli nie --> tworzę katalog w docelowym
 				//odpalam listfiles rekurencyjnie w katalogu (istniejącym już lub przed chwilą utworzonym)
 			}
-<<<<<<< HEAD
 			else if (ep->d_type == DT_REG)
 			{
 				if(stat(ep->d_name, &file1) == 0) {
@@ -207,12 +197,6 @@ void listfiles (char * folder)
 			else
 			{
 				logger("Natrafiono na inny plik");
-=======
-			else
-			{
-				//if(checkFile(ep->d_name)) --> jeżeli plik istnieje w katalogu docelowym, porównujemy
-				//else --> jeżeli plik nie istnieje w katalogu docelowym, kopiujemy.
->>>>>>> refs/remotes/origin/master
 			}
 		}
       (void) closedir (dp);
@@ -221,16 +205,12 @@ void listfiles (char * folder)
     perror ("Nie mozna otworzyc katalogu");
 }
 
-<<<<<<< HEAD
 int checkFile(char * plik) {
 
 	// zwraca: 0 - pliki takie same (wazna data ostatniej modyfikacji)
 	// zwraca: 1 - pliki różne -> aktualizacja
 	// zwraca: -1 - plik nie istnieje -> tworzenie i kopia
 
-=======
-int checkFile(char * plik){
->>>>>>> refs/remotes/origin/master
 	//sprawdza czy plik istnieje w katalogu docelowym.
 	//if(istnieje) { return 1; }
 	//else{ return 0; }
@@ -239,8 +219,4 @@ int checkFile(char * plik){
 //Funkcja sprawdzająca nadmiar w katalogu docelowym --> 
 //odpala listfiles
 //sprawdza czy któryś plik z docelowego jest w źródłowym
-<<<<<<< HEAD
 //jeżeli nie, usuwa plik z docelowego
-=======
-//jeżeli nie, usuwa plik z docelowego
->>>>>>> refs/remotes/origin/master
