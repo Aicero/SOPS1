@@ -46,8 +46,8 @@ void listfiles(char *folder, char *path)
 
 						struct stat file2;
 						if (stat(ep->d_name, &file2) == 0) {
-							printf("%i\n", file1.st_mtime);
-							printf("%i\n", file2.st_mtime);
+							printf("%i\n",ctime(file1.st_mtime));
+							printf("%i\n",ctime(file2.st_mtime));
 						}
 					}
 					//logger(ep->d_name);
