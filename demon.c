@@ -36,26 +36,53 @@ int main(int argc, char * argv[]) {
 	printf("\n %s \n %s \n", pathZrodlowy, pathDocelowy);
 	
 	if (zrodlowy && docelowy) {
-		printf("obie sciezki prowadza do katalogow\n\n");
-		int i;
-		for (i = 3; i < argc; i++) {
-			if (strcmp(argv[i], "-R") == 0) {
-				rekurencyjne = 1;
-			}
-			else if (strcmp(argv[i], "-T") == 0) {
-				if (sscanf(argv[i + 1], "%i", &refreshtime) != 1) {
-					printf("\nPodano bledny czas spania.\n"); //
-					exit(EXIT_FAILURE);
-				}
-			}
-			else if (strcmp(argv[i], "-S") == 0) {
-				if (sscanf(argv[i + 1], "%i", &prog_podzialu) != 1) {
-					printf("\nPodano bledny prog.\n");
-					exit(EXIT_FAILURE);
-				}
-			}
+		printf("\nObie sciezki prowadza do katalogow\n\n");
+ 		
+ 		int index;
+ 		int c; /* getopt do operowania argumentami */
+ 		opterr = 0;
+ 		
+ 		while ((c = getopt (argc, argv, "RrT:t:S:s:")) != -1) /* drukropek oznacza wymagana wartosc jeżeli użyje się opcji np -t 102 -> ok -t -> nie ok */
+ 		{
+ 			switch (c)
+ 			{
+ 				case 'R':
+ 				case 'r':
+ 					rekurencyjne = 1;
+ 					break;
+ 				case 'T':
+ 				case 't':
+ 					if (sscanf(optarg, "%i", &refreshtime) != 1) {
+ 						fprintf(stderr,"--Podano bledny czas spania.\nUzycie: -t \"czas w sekundach\"\n");
+ 						exit(EXIT_FAILURE);
+ 					}
+ 					break;
+ 				case 'S':
+ 				case 's':
+ 					if (sscanf(optarg, "%i", &prog_podzialu) != 1) {
+ 						fprintf(stderr,"--Podano bledny prog.\nUzycie: -s \"prog w bajtach\"\n");
+ 						exit(EXIT_FAILURE);
+ 					}
+ 					break;
+ 				case '?':
+ 					if (optopt == 'c')
+ 					{	
+ 						fprintf (stderr, "  Opcja -%c wymaga podania wartosci.\n", optopt); //tu cos nie chodzi
+ 					}
+ 					else if (isprint (optopt))
+ 					{
+ 						fprintf (stderr, "  Opcja -%c jest nieznana.\n", optopt);
+ 					}
+ 					else
+ 					{
+ 						fprintf (stderr, "  Unknown option character `\\x%x'.\n",	optopt);
+ 					}
+  					exit(EXIT_FAILURE);
+					break;
+ 				default:
+ 					abort ();
+  			}
 		}
-
 		signal(SIGTERM, signalhandler);
 		signal(SIGUSR1, signalhandler);
 
