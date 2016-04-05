@@ -1,13 +1,17 @@
 /*
 Wypisywanie listy plików dostepnych w folderze podanym jako argument.
 */
+#include <time.h>
 
-void listfiles(char *folder, char *path)
+void listfiles(char *folderZrodlowy, char *folderDocelowy)
 {
+	struct stat file1;
+	struct stat file2;
+	
 	DIR *dp;
 	struct dirent *ep;
-
-	dp = opendir(folder);
+	
+	dp = opendir(folderZrodlowy);
 	if (dp != NULL)
 	{
 		while (ep = readdir(dp))
@@ -27,41 +31,49 @@ void listfiles(char *folder, char *path)
 				}
 				else if (ep->d_type == DT_REG)
 				{
-					struct stat file1;
+					
 					if (stat(ep->d_name, &file1) == 0) {
-					}
-					if ((chdir(path)) < 0) {
-						/* Log the failure */
+						}
+					if ((chdir(folderDocelowy)) < 0) {
+						/* Nieudana zmiana folderu na docelowy */
+						fprintf(stderr,"Nieudana zmiana folderu na docelowywat\n");
 						exit(EXIT_FAILURE);
 					}
+					
 					FILE *fp = fopen(ep->d_name, "rw");
 					if (!fp) {
 						logger(ep->d_name);
+						fprintf(stderr, "Brak pliku w drugim folderze\n");
 						logger("brak pliku w drugim folderze\n");
 					}
 					else
 					{
 						logger(ep->d_name);
+						fprintf(stderr, "Plik jest w drugim folderze\n");
 						logger("plik jest w drugim folderze\n");
-
-						struct stat file2;
+						
+						time_t Czas1;
+						time_t Czas2;
+						
 						if (stat(ep->d_name, &file2) == 0) {
-							printf("%i\n",ctime(file1.st_mtime));
-							printf("%i\n",ctime(file2.st_mtime));
+							
 						}
+						Czas1 = file1.st_mtime;
+						Czas2 = file2.st_mtime;
+						fprintf(stderr, "%s",ctime(&Czas1)); // zwraca nieprawidlowy czas za pierwszym razem
+						fprintf(stderr, "%s",ctime(&Czas2));
 					}
 					//logger(ep->d_name);
-					chdir("..");
 
-					if ((chdir(folder)) < 0) {
+					if ((chdir(folderZrodlowy)) < 0) {
+						/* Nieudana zmiana folderu na zrodlowy */
+						fprintf(stderr,"Nieudana zmiana folderu na zrodlowy\n");
 						exit(EXIT_FAILURE);
 					}
-
-					chdir("..");
 				}
 				else
 				{
-					logger("Natrafiono na inny plik");
+					logger("Natrafiono na inny typ pliku");
 				}
 			}
 		(void)closedir(dp);

@@ -9,6 +9,7 @@
 #include <syslog.h>
 #include <string.h>
 #include <dirent.h>
+#include <time.h>
 
 #include "globals.c"
 #include "listfiles.c"
@@ -95,8 +96,8 @@ int main(int argc, char * argv[]) {
 
 		/* Close out the standard file descriptors */
 		close(STDIN_FILENO);
-		close(STDOUT_FILENO);
-		close(STDERR_FILENO);
+		//close(STDOUT_FILENO);
+		//close(STDERR_FILENO);
 
 		/* Daemon-specific initialization goes here */
 
@@ -105,7 +106,7 @@ int main(int argc, char * argv[]) {
 			logger("Demon zostal wybudzony automatycznie.");
 			// tutaj wlasciwe dzialanie demona
 
-			listfiles(argv[1], argv[2]);
+			listfiles(pathZrodlowy, pathDocelowy);
 			logger("Demon zostal uspiony.");
 			sleep(refreshtime); /* uspienie procesu */
 		}
