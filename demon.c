@@ -9,6 +9,7 @@
 #include <syslog.h>
 #include <string.h>
 #include <dirent.h>
+#include <ctype.h>
 
 #include "globals.c"
 #include "listfiles.c"
@@ -18,12 +19,14 @@
 
 
 int main(int argc, char * argv[]) {
-
 	struct stat sb;
-
 	int zrodlowy = (stat(argv[1], &sb) == 0 && S_ISDIR(sb.st_mode));
 	int docelowy = (stat(argv[2], &sb) == 0 && S_ISDIR(sb.st_mode));
-
+	
+	if (argc <= 1){
+		printf("Brak argumentów, poprawne użycie: dem \"Katalog zrodlowy\" \"Katalog docelowy\" +dodatkowe opcje\n"); // trzeba to zamienić na coś porządniejszego
+	}
+	
 	if (!zrodlowy || !docelowy) {
 		fprintf(stderr, "%s nie jest katalogiem, lub nie istnieje.\n", zrodlowy ? argv[2] : argv[1]);
 		exit(EXIT_FAILURE);
@@ -35,29 +38,57 @@ int main(int argc, char * argv[]) {
 	printf("\n %s \n %s \n", pathZrodlowy, pathDocelowy);
 	
 	if (zrodlowy && docelowy) {
-		printf("obie sciezki prowadza do katalogow\n\n");
-		int i;
-		for (i = 3; i < argc; i++) {
-			if (strcmp(argv[i], "-R") == 0) {
-				rekurencyjne = 1;
-			}
-			else if (strcmp(argv[i], "-T") == 0) {
-				if (sscanf(argv[i + 1], "%i", &refreshtime) != 1) {
-					printf("\nPodano bledny czas spania.\n"); //
+		printf("\nObie sciezki prowadza do katalogow\n\n");
+		
+		int index;
+		int c; /* getopt do operowania argumentami */
+		opterr = 0; /* If the value of this variable is nonzero, then getopt prints an error message to the standard error stream if it encounters an unknown option character or an option with a missing required argument. This is the default behavior. If you set this variable to zero, getopt does not print any messages, but it still returns the character ? to indicate an error. */
+		
+		while ((c = getopt (argc, argv, "RrT:t:S:s:")) != -1) /* drukropek oznacza wymagana wartosc jeżeli użyje się opcji np -t 102 -> ok -t -> nie ok */
+		{
+			switch (c)
+			{
+				case 'R':
+				case 'r':
+					rekurencyjne = 1;
+					break;
+				case 'T':
+				case 't':
+					if (sscanf(optarg, "%i", &refreshtime) != 1) {
+						fprintf(stderr,"--Podano bledny czas spania.\nUzycie: -t \"czas w sekundach\"\n");
+						exit(EXIT_FAILURE);
+					}
+					break;
+				case 'S':
+				case 's':
+					if (sscanf(optarg, "%i", &prog_podzialu) != 1) {
+						fprintf(stderr,"--Podano bledny prog.\nUzycie: -s \"prog w bajtach\"\n");
+						exit(EXIT_FAILURE);
+					}
+					break;
+				case '?':
+					if (optopt == 'c')
+					{	
+						fprintf (stderr, "  Opcja -%c wymaga podania wartosci.\n", optopt); //tu cos nie chodzi
+					}
+					else if (isprint (optopt))
+					{
+						fprintf (stderr, "  Opcja -%c jest nieznana.\n", optopt);
+					}
+					else
+					{
+						fprintf (stderr, "  Unknown option character `\\x%x'.\n",	optopt);
+					}
 					exit(EXIT_FAILURE);
-				}
-			}
-			else if (strcmp(argv[i], "-S") == 0) {
-				if (sscanf(argv[i + 1], "%i", &prog_podzialu) != 1) {
-					printf("\nPodano bledny prog.\n");
-					exit(EXIT_FAILURE);
-				}
+				default:
+					abort ();
 			}
 		}
 
+		printf (" Rekurencja = %d, refreshtime = %d, prog_podzialu = %d\n",rekurencyjne, refreshtime, prog_podzialu);
+
 		signal(SIGTERM, signalhandler);
 		signal(SIGUSR1, signalhandler);
-
 
 		/* Our process ID and Session ID */
 		pid_t pid, sid;
@@ -104,8 +135,7 @@ int main(int argc, char * argv[]) {
 		while (1) {
 			logger("Demon zostal wybudzony automatycznie.");
 			// tutaj wlasciwe dzialanie demona
-
-			listfiles(argv[1], argv[2]);
+			listfiles(pathZrodlowy, pathDocelowy);
 			logger("Demon zostal uspiony.");
 			sleep(refreshtime); /* uspienie procesu */
 		}
