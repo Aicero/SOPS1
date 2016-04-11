@@ -26,73 +26,48 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 			{
 				if (ep->d_type == DT_DIR)
 				{
-					//Katalog 
-					// jeÅ¼eli rekurencja: 
-					//czy katalog istenieje w docelowym? jeÅ¼eli nie --> tworzÄ™ katalog w docelowym
-					//odpalam listfiles rekurencyjnie w katalogu (istniejÄ…cym juÅ¼ lub przed chwilÄ… utworzonym)
 				}
 				else if (ep->d_type == DT_REG)
 				{
-					if ((chdir(folderZrodlowy)) < 0) {
-						/* Nieudana zmiana folderu na zrodlowy */
+					if ((chdir(folderZrodlowy)) < 0) 
+					{
 						fprintf(stderr, "Nieudana zmiana folderu na zrodlowy\n");
-						exit(EXIT_FAILURE);
+						continue;
 					}
-					if (stat(ep->d_name, &file1) != 0) {
-						// logujemy error i cos z tym robimy
-						fprintf(stderr, "problem1!!\n\n");
-						perror("blad stat");
+					
+					if (stat(ep->d_name, &file1) < 0) 
+					{
+						fprintf(stderr, "Nieudana proba otworzenia pliku w folderze zrodlowym %s!\n", ep->d_name);
+						continue;
 					}
+					
+					time_t Czas1 = file1.st_mtime;
 
-					if ((chdir(folderDocelowy)) < 0) {
-						/* Nieudana zmiana folderu na docelowy */
+					if ((chdir(folderDocelowy)) < 0) 
+					{
 						fprintf(stderr, "Nieudana zmiana folderu na docelowy\n");
-						exit(EXIT_FAILURE);
+						continue;
 					}
-
-					FILE *fp = fopen(ep->d_name, "rw");
-					if (!fp) {
-						mode_t mode;
-						//logger(ep->d_name);
-						fprintf(stderr, "Brak pliku w drugim folderze\n");
-						//logger("brak pliku w drugim folderze\n");
-						fprintf(stderr, "TWORZYMY NOWY PLIK CYKA BLYAT!!\n\n");
-						fprintf(stderr, "%s", ep->d_name);
-						mode = file1.st_mode; // za pierwszym razem z³a wartoœæ 
-						NRMcopy(ep->d_name, mode);
+					
+					if (stat(ep->d_name, &file2) < 0) {
+						fprintf(stderr, "Nieudana proba otworzenia pliku w folderze Docelowym. Tworzymy plik %s\n", ep->d_name);
+						mode_t mode = file1.st_mode;
+						NRMcopy(ep->d_name, Czas1, mode);
 					}
+					
 					else
 					{
-						//logger(ep->d_name);
 						fprintf(stderr, "Plik jest w drugim folderze\n");
-						//logger("plik jest w drugim folderze\n");
-
-						time_t Czas1;
-						time_t Czas2;
-
-
-						if (stat(ep->d_name, &file2) == 0) {
-							// wpisujemy jakiœ error?
-						}
-						Czas1 = file1.st_mtime;
-						Czas2 = file2.st_mtime;
-						fprintf(stderr, "%s", ctime(&Czas1)); // zwraca nieprawidlowy czas za pierwszym razem
+						
+						time_t Czas2 = file2.st_mtime;
+						fprintf(stderr, "%s", ctime(&Czas1));
 						fprintf(stderr, "%s", ctime(&Czas2));
 						if (Czas1 > Czas2) {
-
 							mode_t mode;
-							fprintf(stderr, "czas1>czas2\n");
-							fprintf(stderr, "KOPIUJEMY CYKA BLYAT!!\n\n");
-							mode = file1.st_mode; // za pierwszym razem z³a wartoœæ 
-							NRMcopy(ep->d_name, mode);
+							fprintf(stderr, "czas1 > czas2\n");
+							mode = file1.st_mode;
+							NRMcopy(ep->d_name, Czas1, mode);
 						}
-					}
-					//logger(ep->d_name);
-
-					if ((chdir(folderZrodlowy)) < 0) {
-						/* Nieudana zmiana folderu na zrodlowy */
-						fprintf(stderr, "Nieudana zmiana folderu na zrodlowy\n");
-						exit(EXIT_FAILURE);
 					}
 				}
 				else
