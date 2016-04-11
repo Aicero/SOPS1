@@ -42,17 +42,20 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 					}
 					
 					time_t Czas1 = file1.st_mtime;
-
+					char sciezkaPlikuZrodlowego[PATH_MAX +1];
+					realpath(ep->d_name, sciezkaPlikuZrodlowego);
+					
 					if ((chdir(folderDocelowy)) < 0) 
 					{
 						fprintf(stderr, "Nieudana zmiana folderu na docelowy\n");
 						continue;
 					}
 					
-					if (stat(ep->d_name, &file2) < 0) {
+					if (stat(ep->d_name, &file2) < 0) 
+					{
 						fprintf(stderr, "Nieudana proba otworzenia pliku w folderze Docelowym. Tworzymy plik %s\n", ep->d_name);
 						mode_t mode = file1.st_mode;
-						NRMcopy(ep->d_name, time(NULL), mode);
+						NRMcopy(ep->d_name, sciezkaPlikuZrodlowego, time(NULL), mode);
 					}
 					
 					else
@@ -62,11 +65,12 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 						time_t Czas2 = file2.st_mtime;
 						fprintf(stderr, "%s", ctime(&Czas1));
 						fprintf(stderr, "%s", ctime(&Czas2));
-						if (Czas1 > Czas2) {
+						if (Czas1 > Czas2) 
+						{
 							mode_t mode;
 							fprintf(stderr, "czas1 > czas2\n");
 							mode = file1.st_mode;
-							NRMcopy(ep->d_name, Czas1, mode);
+							NRMcopy(ep->d_name, sciezkaPlikuZrodlowego, Czas1, mode);
 						}
 					}
 				}
