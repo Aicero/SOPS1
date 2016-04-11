@@ -4,49 +4,50 @@ Kopiowanie plików uzywajac read/write
 #include <utime.h>
 #define BUF_SIZE 8192
 
-int NRMcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t modeZrodlowy) 
+int NRMcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t modeZrodlowy)
 {
-	int iZrodlowy, iDocelowy;    
-    ssize_t inputBytes, outputBytes;    /* Number of bytes returned by read() and write() */
-    char buffer[BUF_SIZE];      /* Character buffer */
-    
-	/* Tworzenie deskryptorów */
-    iZrodlowy = open(pathZrodlowy, O_RDONLY);
-    if (iZrodlowy == -1) 
+	remove(pathDocelowy);
+	int iZrodlowy, iDocelowy;
+	ssize_t inputBytes, outputBytes;    /* Number of bytes returned by read() and write() */
+	char buffer[BUF_SIZE];      /* Character buffer */
+
+								/* Tworzenie deskryptorów */
+	iZrodlowy = open(pathZrodlowy, O_RDONLY);
+	if (iZrodlowy == -1)
 	{
-		perror (pathZrodlowy);
-		fprintf(stderr,"%s\n",pathDocelowy);
-    }
-	
+		perror(pathZrodlowy);
+		fprintf(stderr, "%s\n", pathDocelowy);
+	}
+
 	/* Tworzenie deskryptorów */
-    iDocelowy = open(pathDocelowy, O_WRONLY | O_TRUNC | O_CREAT, modeZrodlowy);
-    if(iDocelowy == -1)
+	iDocelowy = open(pathDocelowy, O_WRONLY | O_TRUNC | O_CREAT, modeZrodlowy);
+	if (iDocelowy == -1)
 	{
-        perror (pathDocelowy);
-		fprintf(stderr,"%s\n",pathDocelowy);
-    }
- 
-    /* Kopiowanie */
-    while((inputBytes = read (iZrodlowy, &buffer, BUF_SIZE)) > 0){
-            outputBytes = write (iDocelowy, &buffer, (ssize_t) inputBytes);
-            if(outputBytes != inputBytes)
-			{
-                perror("Problem przy kopiowaniu pliku");
-				fprintf(stderr,"%s\n",pathDocelowy);
-                return -1;
-            }
-    }
- 
-    /* Zamykanie deskryptorow */
-    close (iZrodlowy);
-    close (iDocelowy);
- 
+		perror(pathDocelowy);
+		fprintf(stderr, "%s\n", pathDocelowy);
+	}
+
+	/* Kopiowanie */
+	while ((inputBytes = read(iZrodlowy, &buffer, BUF_SIZE)) > 0) {
+		outputBytes = write(iDocelowy, &buffer, (ssize_t)inputBytes);
+		if (outputBytes != inputBytes)
+		{
+			perror("Problem przy kopiowaniu pliku");
+			fprintf(stderr, "%s\n", pathDocelowy);
+			return -1;
+		}
+	}
+
+	/* Zamykanie deskryptorow */
+	close(iZrodlowy);
+	close(iDocelowy);
+
 	/* Ustawianie czasu modyfikacji */
 	struct utimbuf nowy_czas;
 	nowy_czas.modtime = czasZrodlowy;
-	if (utime(pathDocelowy, &nowy_czas) < 0) 
+	if (utime(pathDocelowy, &nowy_czas) < 0)
 	{
 		perror(pathDocelowy);
 	}
-    return 0;
+	return 0;
 }
