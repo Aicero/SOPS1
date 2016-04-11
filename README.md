@@ -43,6 +43,5 @@ Dodatkowo:
  * próg dzielący pliki małe od dużych: dodatkowy opcjonalny parametr
 
 
-### Lista TO-DO:
- * jest w zakadce "Issues"
+### Lista TO-DO jest w zakadce "Issues"!
  
