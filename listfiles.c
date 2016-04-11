@@ -13,7 +13,6 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 	dp = opendir(folderZrodlowy);
 	if (dp != NULL)
 	{
-		fprintf(stderr, "\n");
 		while (ep = readdir(dp))
 
 			if (!strcmp(ep->d_name, ".") || !strcmp(ep->d_name, "..") /*|| ep->d_name[strlen(ep->d_name)-1] != '~'*/)
@@ -53,22 +52,18 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 					if (stat(FileDocelowyPath, &file2) < 0)
 					{
 						fprintf(stderr, "Nieudana proba otworzenia pliku w folderze Docelowym. Tworzymy plik %s\n", ep->d_name);
-						NRMcopy(FileDocelowyPath, FileZrodlowyPath, time(NULL), file1.st_mode);
+						MEMcopy(FileDocelowyPath, FileZrodlowyPath, time(NULL), file1.st_mode);
 					}
 
 					else
 					{
-						fprintf(stderr, "Plik jest w drugim folderze\n");
-
 						time_t Czas2 = file2.st_mtime;
-						fprintf(stderr, "%s", ctime(&Czas1));
-						fprintf(stderr, "%s", ctime(&Czas2));
 						if (Czas1 > Czas2)
 						{
 							mode_t mode;
 							fprintf(stderr, "czas1 > czas2\n");
 							mode = file1.st_mode;
-							NRMcopy(FileDocelowyPath, FileZrodlowyPath, Czas1, mode);
+							MEMcopy(FileDocelowyPath, FileZrodlowyPath, Czas1, mode);
 						}
 					}
 				}

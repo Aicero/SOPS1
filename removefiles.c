@@ -11,7 +11,6 @@ void removefiles(char *folderZrodlowy, char *folderDocelowy)
 	dp = opendir(folderDocelowy);
 	if (dp != NULL)
 	{
-		fprintf(stderr, "\n");
 		while (ep = readdir(dp))
 			if (!strcmp(ep->d_name, ".") || !strcmp(ep->d_name, "..") /*|| ep->d_name[strlen(ep->d_name)-1] != '~'*/)
 			{
