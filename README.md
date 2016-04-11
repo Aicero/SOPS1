@@ -44,5 +44,5 @@ Dodatkowo:
 
 
 ### Lista TO-DO:
- * konwersja z tablicy char (string) do integera, w celu przypisania do globalnej flagi "refresh_time" i "prog_podzialu"
+ * jest w zakadce "Issues"
  
