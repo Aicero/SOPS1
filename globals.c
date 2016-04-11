@@ -2,6 +2,9 @@
 #include <time.h>
 #include "NRMcopy.c"
 #include "combinePath.c"
+#include "MEMcopy.c"
+
+
 char pathZrodlowy[PATH_MAX +1];
 char pathDocelowy[PATH_MAX +1];
 int rekurencyjne = 0;
