@@ -5,8 +5,6 @@ void signalhandler(int signum) {
 		exit(signum);
 	}
 	else if (signum == SIGUSR1) {
-		// wywolanie metody synchronizujacej katalogi
-		logger("Demon wybudzony przez SIGUSR1.");
-		sleep(refreshtime); /* uspienie procesu */
+		flagaSignal = 1;
 	}
 }
