@@ -33,12 +33,20 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 				}
 				else if (ep->d_type == DT_REG)
 				{
-					if (stat(ep->d_name, &file1) == 0) {
-						// wpisujemy jakiœ error?
+					if ((chdir(folderZrodlowy)) < 0) {
+						/* Nieudana zmiana folderu na zrodlowy */
+						fprintf(stderr, "Nieudana zmiana folderu na zrodlowy\n");
+						exit(EXIT_FAILURE);
 					}
+					if (stat(ep->d_name, &file1) != 0) {
+						// logujemy error i cos z tym robimy
+						fprintf(stderr, "problem1!!\n\n");
+						perror("blad stat");
+					}
+
 					if ((chdir(folderDocelowy)) < 0) {
 						/* Nieudana zmiana folderu na docelowy */
-						fprintf(stderr, "Nieudana zmiana folderu na docelowywat\n");
+						fprintf(stderr, "Nieudana zmiana folderu na docelowy\n");
 						exit(EXIT_FAILURE);
 					}
 
