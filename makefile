@@ -5,3 +5,6 @@ compile :
 
 kill :
 	killall dem
+
+sig :
+	killall -SIGUSR1 dem
