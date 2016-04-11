@@ -16,6 +16,7 @@
 #include "logger.c"
 #include "checkFile.c"
 #include "signalhandler.c"
+#include "removefiles.c"
 
 
 int main(int argc, char * argv[]) {
@@ -120,10 +121,12 @@ int main(int argc, char * argv[]) {
 			if (flagaSignal == 0) {
 				logger("Demon wybudzony automatycznie.");
 				listfiles(pathZrodlowy, pathDocelowy);
+				removefiles(pathZrodlowy, pathDocelowy);
 			}
 			else {
 				logger("Demon wybudzony przez SIGUSR1.");
 				listfiles(pathZrodlowy, pathDocelowy);
+				removefiles(pathZrodlowy, pathDocelowy);
 				flagaSignal = 0;
 			}
 			logger("Demon zostal uspiony.");

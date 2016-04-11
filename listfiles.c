@@ -17,7 +17,7 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 	{
 		fprintf(stderr, "\n");
 		while (ep = readdir(dp))
-			if (!strcmp(ep->d_name, ".") || !strcmp(ep->d_name, ".."))
+			if (!strcmp(ep->d_name, ".") || !strcmp(ep->d_name, "..") /*|| ep->d_name[strlen(ep->d_name)-1] != '~'*/)
 			{
 				continue;
 				//Katalogi specjalne, nie powinno nic robic.
