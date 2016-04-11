@@ -1,10 +1,6 @@
 /*
 Wypisywanie listy plików dostepnych w folderze podanym jako argument.
 */
-#include <time.h>
-#include "NRMcopy.c"
-#include "combinePath.c"
-void removefiles(char *folderZrodlowy, char *folderDocelowy);
 
 void listfiles(char *folderZrodlowy, char *folderDocelowy)
 {
