@@ -4,6 +4,7 @@ Wypisywanie listy plików dostepnych w folderze podanym jako argument.
 
 void removefiles(char *folderZrodlowy, char *folderDocelowy)
 {
+	struct stat file1;
 	DIR *dp;
 	struct dirent *ep;
 
@@ -19,32 +20,26 @@ void removefiles(char *folderZrodlowy, char *folderDocelowy)
 			}
 			else
 			{
-				if (ep->d_type == DT_DIR)
+				char FileZrodlowyPath[PATH_MAX +1];
+				char FileDocelowyPath[PATH_MAX +1];
+				combinePath(FileZrodlowyPath, folderZrodlowy, ep->d_name);
+				combinePath(FileDocelowyPath, folderDocelowy, ep->d_name);
+				
+				if (ep->d_type == DT_DIR && rekurencyjne)
 				{
+					if (stat(FileZrodlowyPath, &file1) == -1) 
+					{
+						fprintf(stderr, "Folder nie istnieje w folderze zrodlowym. Usuwamy folder %s\n", FileDocelowyPath);
+						remove(FileDocelowyPath);
+					}
 				}
 				else if (ep->d_type == DT_REG)
 				{
-					if ((chdir(folderDocelowy)) < 0) 
+					if ( access(FileZrodlowyPath, F_OK ) == -1 ) 
 					{
-						fprintf(stderr, "Nieudana zmiana folderu na docelowy\n");
-						continue;
+						fprintf(stderr, "Plik nie istnieje w folderze zrodlowym. Usuwamy plik %s\n", FileDocelowyPath);
+						remove(FileDocelowyPath);
 					}
-
-					char sciezkaPlikuDocelowego[PATH_MAX +1];
-					realpath(ep->d_name, sciezkaPlikuDocelowego);
-					
-					if ((chdir(folderZrodlowy)) < 0) 
-					{
-						fprintf(stderr, "Nieudana zmiana folderu na docelowy\n");
-						continue;
-					}
-					
-					if ( access(ep->d_name, F_OK ) == -1 ) 
-					{
-						fprintf(stderr, "Plik nie istnieje w folderze zrodlowym. Usuwamy plik %s\n", ep->d_name);
-						remove(sciezkaPlikuDocelowego);
-					}
-
 				}
 				else
 				{
