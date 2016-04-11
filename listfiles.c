@@ -52,7 +52,7 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 					if (stat(ep->d_name, &file2) < 0) {
 						fprintf(stderr, "Nieudana proba otworzenia pliku w folderze Docelowym. Tworzymy plik %s\n", ep->d_name);
 						mode_t mode = file1.st_mode;
-						NRMcopy(ep->d_name, Czas1, mode);
+						NRMcopy(ep->d_name, time(NULL), mode);
 					}
 					
 					else
