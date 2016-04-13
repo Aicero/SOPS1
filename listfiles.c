@@ -34,14 +34,17 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 					continue;
 				}
 
-				if (ep->d_type == DT_DIR && g_rekurencyjne)
+				if (ep->d_type == DT_DIR)
 				{
-					if (stat(FileDocelowyPath, &file1) == -1)
+					if(g_rekurencyjne)
 					{
-						mkdir(FileDocelowyPath, file1.st_mode);
+						if (stat(FileDocelowyPath, &file1) == -1)
+						{
+							mkdir(FileDocelowyPath, file1.st_mode);
+						}
+						listfiles(FileZrodlowyPath, FileDocelowyPath);
+						removefiles(FileZrodlowyPath, FileDocelowyPath);
 					}
-					listfiles(FileZrodlowyPath, FileDocelowyPath);
-					removefiles(FileZrodlowyPath, FileDocelowyPath);
 					continue;
 				}
 				else if (ep->d_type == DT_REG) // tu dodaæ wybór metody kopiowania
@@ -71,6 +74,7 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 							//MEMcopy(FileDocelowyPath, FileZrodlowyPath, Czas1, mode);
 						}
 					}
+					continue;
 				}
 				else
 				{

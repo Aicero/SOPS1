@@ -24,14 +24,18 @@ void removefiles(char *folderZrodlowy, char *folderDocelowy)
 				combinePath(FileZrodlowyPath, folderZrodlowy, ep->d_name);
 				combinePath(FileDocelowyPath, folderDocelowy, ep->d_name);
 
-				if (ep->d_type == DT_DIR && g_rekurencyjne)
+				if (ep->d_type == DT_DIR)
 				{
-					if (stat(FileZrodlowyPath, &file1) == -1)
+					if(g_rekurencyjne)
 					{
-						// logger
-						fprintf(stderr, "Folder nie istnieje w folderze zrodlowym. Usuwamy folder %s\n", FileDocelowyPath);
-						remove(FileDocelowyPath);
+						if (stat(FileZrodlowyPath, &file1) == -1)
+						{
+							// logger
+							fprintf(stderr, "Folder nie istnieje w folderze zrodlowym. Usuwamy folder %s\n", FileDocelowyPath);
+							remove(FileDocelowyPath);
+						}
 					}
+					continue;
 				}
 				else if (ep->d_type == DT_REG)
 				{
@@ -40,6 +44,7 @@ void removefiles(char *folderZrodlowy, char *folderDocelowy)
 						// logger
 						fprintf(stderr, "Plik nie istnieje w folderze zrodlowym. Usuwamy plik %s\n", FileDocelowyPath);
 						remove(FileDocelowyPath);
+						continue;
 					}
 				}
 				else
