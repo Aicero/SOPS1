@@ -16,7 +16,7 @@ testrek :
 	./dem TESTOWANIE/zrodlo TESTOWANIE/docel -R -T 3 -S 2
 
 testverb :
-	./dem TESTOWANIE/zrodlo TESTOWANIE/docel -r -t 3 -s 10 -v
+	./dem TESTOWANIE/zrodlo TESTOWANIE/docel -r -t 7 -s 10 -v
 
 clean :
 	rm -rf TESTOWANIE
