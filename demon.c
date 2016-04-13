@@ -16,6 +16,9 @@
 #include "logger.c"
 #include "signalhandler.c"
 #include "removefiles.c"
+#include "nrmcopy.c"
+#include "combinePath.c"
+#include "MEMcopy.c"
 
 
 int main(int argc, char * argv[]) {

@@ -1,8 +1,5 @@
 #include <limits.h>
 #include <time.h>
-#include "nrmcopy.c"
-#include "combinePath.c"
-#include "MEMcopy.c"
 
 
 char g_pathZrodlowy[PATH_MAX + 1];
@@ -20,3 +17,4 @@ int checkFile(char *plik);
 void logger(char* message);
 void loggerparam(char* message, char* sParam);
 void removefiles(char *folderZrodlowy, char *folderDocelowy);
+void combinePath(char* combined, const char* katalog, const char* nazwa);
