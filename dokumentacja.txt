@@ -1,4 +1,4 @@
-Skład grupy:
+﻿Skład grupy:
  - Gabriel Mackiewicz
  - Tomasz Osipiak
 
@@ -14,3 +14,6 @@ Poszczególne części programu:
  - obsługa sygnałów SIGTERM i SIGUSR1 w handlerze
  - logowanie zdarzeń do logu systemowego
  - 
+
+
+AEGOAGEOPIAGENIPOAEGOINGEANOIEG
