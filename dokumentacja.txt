@@ -13,4 +13,16 @@ Poszczególne części programu:
    -v do ustawienia trybu "verbose" (logi dodatkowo do konsoli)
  - obsługa sygnałów SIGTERM i SIGUSR1 w handlerze
  - logowanie zdarzeń do logu systemowego
- - 
+ - tworzenie/kopiowanie plików z folderu źródłowego do docelowego
+ - usuwanie plików z katalogu docelowego
+ - kopiowanie metodą standardową (read/write)
+ - kopiowanie metodą (mmap/write)
+
+Sposób uruchamiania
+ ./dem [sciezka_zrodlowa] [sciezka_docelowa] [opcjonalne parametry: -r, -t [czas], -s [rozmiar], -v]
+
+Komendy, pomocne przy testowaniu:
+ - 'make' - kompilacja projektu
+ - 'make prep' - stworzenie folderów docelowego i źródłowego wraz z plikami
+ - 'make test', 'make testrek', 'make testverb': uruchomienie demona na folderach stworzonych komendą 'make prep'
+ - 'make clean' - usunięcie folderów
