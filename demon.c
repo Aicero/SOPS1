@@ -10,7 +10,7 @@
 #include <string.h>
 #include <dirent.h>
 #include <time.h>
-
+#include <libgen.h>
 #include "globals.c"
 #include "listfiles.c"
 #include "logger.c"
