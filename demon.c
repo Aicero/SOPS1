@@ -60,7 +60,7 @@ int main(int argc, char * argv[]) {
 					exit(EXIT_FAILURE);
 				}
 				if(g_refreshTime < 0){
-					fprintf(stderr, "--Czas spania powinien miec wartosc dodatnia.\nUzycie: -s \"prog w bajtach\"\n");
+					fprintf(stderr, "--Czas spania powinien miec wartosc dodatnia.\nUzycie: -t \"czas w sekundach\"\n");
 					exit(EXIT_FAILURE);
 				}
 				break;
