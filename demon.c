@@ -125,6 +125,11 @@ int main(int argc, char * argv[]) {
 
 		/* The Big Loop */
 		while (1) {
+			if(!opendir(g_pathZrodlowy) || !opendir(g_pathDocelowy))
+			{
+				logger("Jeden z folderow zostal usuniety!");
+				exit(EXIT_FAILURE);
+			}
 			if (g_flagaSignal == 0) {
 				logger("Demon wybudzony automatycznie.\n");
 				listfiles(g_pathZrodlowy, g_pathDocelowy);
