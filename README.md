@@ -5,7 +5,7 @@ Dodatkowo:
 - Opcja *-R* pozwalająca na rekurencyjną synchronizację katalogów (teraz pozycje będące katalogami nie są ignorowane). W szczególności jeżeli demon stwierdzi w katalogu docelowym podkatalog którego brak w katalogu źródłowym powinien usunąć go wraz z zawartością. ***(10p)***
 - W zależności od rozmiaru plików dla małych plików wykonywane jest kopiowanie przy pomocy read/write a w przypadku dużych przy pomocy mmap/write (plik źródłowy) zostaje zamapowany w całości w pamięci. Próg dzielący pliki małe od dużych może być przekazywany jako opcjonalny argument. ***(10p)***
 
-
+WAAAAAAAAAAAAATISTHIS
 
 ### Zarys działania programu
 ###### *1. Parametry wejściowe:*
