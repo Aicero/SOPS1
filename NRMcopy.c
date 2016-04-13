@@ -15,16 +15,20 @@ int NRMcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 	iZrodlowy = open(pathZrodlowy, O_RDONLY);
 	if (iZrodlowy == -1)
 	{
+		// logger
 		perror(pathZrodlowy);
 		fprintf(stderr, "%s\n", pathDocelowy);
+		return -1;
 	}
 
 	/* Tworzenie deskryptorów */
 	iDocelowy = open(pathDocelowy, O_WRONLY | O_TRUNC | O_CREAT, modeZrodlowy);
 	if (iDocelowy == -1)
 	{
+		// logger
 		perror(pathDocelowy);
 		fprintf(stderr, "%s\n", pathDocelowy);
+		return -1;
 	}
 
 	/* Kopiowanie */
@@ -47,6 +51,7 @@ int NRMcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 	nowy_czas.modtime = czasZrodlowy;
 	if (utime(pathDocelowy, &nowy_czas) < 0)
 	{
+		// logger
 		perror(pathDocelowy);
 	}
 	return 0;

@@ -24,10 +24,11 @@ void removefiles(char *folderZrodlowy, char *folderDocelowy)
 				combinePath(FileZrodlowyPath, folderZrodlowy, ep->d_name);
 				combinePath(FileDocelowyPath, folderDocelowy, ep->d_name);
 
-				if (ep->d_type == DT_DIR && rekurencyjne)
+				if (ep->d_type == DT_DIR && g_rekurencyjne)
 				{
 					if (stat(FileZrodlowyPath, &file1) == -1)
 					{
+						// logger
 						fprintf(stderr, "Folder nie istnieje w folderze zrodlowym. Usuwamy folder %s\n", FileDocelowyPath);
 						remove(FileDocelowyPath);
 					}
@@ -36,6 +37,7 @@ void removefiles(char *folderZrodlowy, char *folderDocelowy)
 				{
 					if (access(FileZrodlowyPath, F_OK) == -1)
 					{
+						// logger
 						fprintf(stderr, "Plik nie istnieje w folderze zrodlowym. Usuwamy plik %s\n", FileDocelowyPath);
 						remove(FileDocelowyPath);
 					}
@@ -49,6 +51,7 @@ void removefiles(char *folderZrodlowy, char *folderDocelowy)
 	}
 	else
 	{
+		// logger
 		perror("Nie mozna otworzyc katalogu");
 	}
 }

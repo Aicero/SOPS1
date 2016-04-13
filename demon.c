@@ -14,7 +14,6 @@
 #include "globals.c"
 #include "listfiles.c"
 #include "logger.c"
-#include "checkFile.c"
 #include "signalhandler.c"
 #include "removefiles.c"
 
@@ -31,42 +30,43 @@ int main(int argc, char * argv[]) {
 	}
 
 	/* przypisanie adresow katalogu docelowego i zrodlowego */
-	realpath(argv[1], pathZrodlowy);
-	realpath(argv[2], pathDocelowy);
-	//printf("\n %s \n %s \n", pathZrodlowy, pathDocelowy);
+	realpath(argv[1], g_pathZrodlowy);
+	realpath(argv[2], g_pathDocelowy);
 
-	if (pathZrodlowy == NULL || pathDocelowy == NULL) {
+	if (g_pathZrodlowy == NULL || g_pathDocelowy == NULL) {
 		fprintf(stderr, "Blad rozwijania sciezki.");
+		exit(EXIT_FAILURE);
 	}
 
-	if (zrodlowy && docelowy) {
+	if (g_pathZrodlowy && g_pathDocelowy) {
 		int c;
 		opterr = 0;
 
 		/* drukropek oznacza wymagana wartosc jezeli uzyje sie opcji np -t 102 -> ok -t -> nie ok */
-		while ((c = getopt(argc, argv, "RrT:t:S:s:v")) != -1) {
+		while ((c = getopt(argc, argv, "RrT:t:S:s:Vv")) != -1) {
 			switch (c)
 			{
 			case 'R':
 			case 'r':
-				rekurencyjne = 1;
+				g_rekurencyjne = 1;
 				break;
 			case 'T':
 			case 't':
-				if (sscanf(optarg, "%i", &refreshtime) != 1) {
+				if (sscanf(optarg, "%i", &g_refreshTime) != 1) {
 					fprintf(stderr, "--Podano bledny czas spania.\nUzycie: -t \"czas w sekundach\"\n");
 					exit(EXIT_FAILURE);
 				}
 				break;
 			case 'S':
 			case 's':
-				if (sscanf(optarg, "%i", &prog_podzialu) != 1) {
+				if (sscanf(optarg, "%i", &g_progPodzialu) != 1) {
 					fprintf(stderr, "--Podano bledny prog.\nUzycie: -s \"prog w bajtach\"\n");
 					exit(EXIT_FAILURE);
 				}
 				break;
+			case 'V':
 			case 'v':
-				verbose = 1;
+				g_verbose = 1;
 				break;
 			case '?':
 				if (optopt == 'T' || optopt == 't' || optopt == 'S' || optopt == 's') {
@@ -84,6 +84,7 @@ int main(int argc, char * argv[]) {
 				abort();
 			}
 		}
+
 		signal(SIGTERM, signalhandler);
 		signal(SIGUSR1, signalhandler);
 
@@ -116,24 +117,24 @@ int main(int argc, char * argv[]) {
 
 		/* Close out the standard file descriptors */
 		close(STDIN_FILENO);
-		if(!verbose)close(STDOUT_FILENO);
-		if(!verbose)close(STDERR_FILENO);
+		if (!g_verbose) close(STDOUT_FILENO);
+		if (!g_verbose) close(STDERR_FILENO);
 
 		/* The Big Loop */
 		while (1) {
-			if (flagaSignal == 0) {
+			if (g_flagaSignal == 0) {
 				logger("Demon wybudzony automatycznie.\n");
-				listfiles(pathZrodlowy, pathDocelowy);
-				removefiles(pathZrodlowy, pathDocelowy);
+				listfiles(g_pathZrodlowy, g_pathDocelowy);
+				removefiles(g_pathZrodlowy, g_pathDocelowy);
 			}
 			else {
 				logger("Demon wybudzony przez SIGUSR1.\n");
-				listfiles(pathZrodlowy, pathDocelowy);
-				removefiles(pathZrodlowy, pathDocelowy);
-				flagaSignal = 0;
+				listfiles(g_pathZrodlowy, g_pathDocelowy);
+				removefiles(g_pathZrodlowy, g_pathDocelowy);
+				g_flagaSignal = 0;
 			}
 			logger("Demon zostal uspiony.\n");
-			sleep(refreshtime);
+			sleep(g_refreshTime);
 		}
 		exit(EXIT_SUCCESS);
 	}
