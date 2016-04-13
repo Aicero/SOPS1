@@ -38,5 +38,8 @@ int MEMcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 	{
 		perror(pathDocelowy);
 	}
+	char* bname;
+	bname = basename(pathDocelowy);
+	loggerparam("Plik skopiowany do folderu docelowego. mmap/write",bname);
 	return 0;
 }

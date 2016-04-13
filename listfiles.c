@@ -54,7 +54,7 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 
 					if (stat(FileDocelowyPath, &file2) < 0)
 					{
-						if (g_progPodzialu == 0 /*|| rozmiarpliku < g_progPodzialu*/) {
+						if (g_progPodzialu == 0 || file1.st_size < (size_t)g_progPodzialu) {
 							if (nrmcopy(FileDocelowyPath, FileZrodlowyPath, time(NULL), file1.st_mode) != 0)
 							{
 								// logger blad tworzenia nowego pliku
@@ -75,22 +75,22 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 						{
 							mode_t mode = file1.st_mode;
 
-							if (g_progPodzialu == 0 /*|| rozmiarpliku < g_progPodzialu*/) {
+							if (g_progPodzialu == 0 || file1.st_size < (size_t)g_progPodzialu) {
 								if (nrmcopy(FileDocelowyPath, FileZrodlowyPath, Czas1, mode) != 0) {
 									// logger blad kopiowania
-									logger("Blad kopiowania pliku do katalogu docelowego.");
+									logger("Blad kopiowania pliku do katalogu docelowego. read/write\n");
 								}
 								else {
-									loggerparam("Plik skopiowany do folderu docelowego.", ep->d_name);
+									loggerparam("Plik skopiowany do folderu docelowego. read/write\n", ep->d_name);
 								}
 							}
 							else {
 								if (MEMcopy(FileDocelowyPath, FileZrodlowyPath, Czas1, mode) != 0) {
 									// logger blad kopiowania
-									logger("Blad kopiowania pliku do katalogu docelowego.");
+									logger("Blad kopiowania pliku do katalogu docelowego. mmap/write\n");
 								}
 								else {
-									loggerparam("Plik skopiowany do folderu docelowego.", ep->d_name);
+									loggerparam("Plik skopiowany do folderu docelowego. mmap/write\n", ep->d_name);
 								}
 							}
 						}

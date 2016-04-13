@@ -54,6 +54,6 @@ int nrmcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 	}
 	char* bname;
 	bname = basename(pathDocelowy);
-	loggerparam("Plik skopiowany do folderu docelowego. ",bname);
+	loggerparam("Plik skopiowany do folderu docelowego. read/write",bname);
 	return 0;
 }
