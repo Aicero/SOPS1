@@ -10,6 +10,7 @@ char pathDocelowy[PATH_MAX +1];
 int rekurencyjne = 0;
 int refreshtime = 5; // 5min * 60sec = 300
 int prog_podzialu = 0;
+volatile int verbose = 0;
 volatile int flagaSignal = 0;
 volatile int duringSynchronization = 0;
 

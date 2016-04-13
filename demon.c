@@ -44,7 +44,7 @@ int main(int argc, char * argv[]) {
 		opterr = 0;
 
 		/* drukropek oznacza wymagana wartosc jezeli uzyje sie opcji np -t 102 -> ok -t -> nie ok */
-		while ((c = getopt(argc, argv, "RrT:t:S:s:")) != -1) {
+		while ((c = getopt(argc, argv, "RrT:t:S:s:v")) != -1) {
 			switch (c)
 			{
 			case 'R':
@@ -64,6 +64,9 @@ int main(int argc, char * argv[]) {
 					fprintf(stderr, "--Podano bledny prog.\nUzycie: -s \"prog w bajtach\"\n");
 					exit(EXIT_FAILURE);
 				}
+				break;
+			case 'v':
+				verbose = 1;
 				break;
 			case '?':
 				if (optopt == 'T' || optopt == 't' || optopt == 'S' || optopt == 's') {
@@ -113,23 +116,23 @@ int main(int argc, char * argv[]) {
 
 		/* Close out the standard file descriptors */
 		close(STDIN_FILENO);
-		//close(STDOUT_FILENO);
-		//close(STDERR_FILENO);
+		if(!verbose)close(STDOUT_FILENO);
+		if(!verbose)close(STDERR_FILENO);
 
 		/* The Big Loop */
 		while (1) {
 			if (flagaSignal == 0) {
-				logger("Demon wybudzony automatycznie.");
+				logger("Demon wybudzony automatycznie.\n");
 				listfiles(pathZrodlowy, pathDocelowy);
 				removefiles(pathZrodlowy, pathDocelowy);
 			}
 			else {
-				logger("Demon wybudzony przez SIGUSR1.");
+				logger("Demon wybudzony przez SIGUSR1.\n");
 				listfiles(pathZrodlowy, pathDocelowy);
 				removefiles(pathZrodlowy, pathDocelowy);
 				flagaSignal = 0;
 			}
-			logger("Demon zostal uspiony.");
+			logger("Demon zostal uspiony.\n");
 			sleep(refreshtime);
 		}
 		exit(EXIT_SUCCESS);
