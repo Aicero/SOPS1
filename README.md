@@ -13,7 +13,7 @@ Dodatkowo:
         ścieżka źródłowa (*) - musi być katalogiem
         ścieżka docelowa (*) - musi być katalogiem
         -R (opcjonalny) - oznacza rekurencyjna synchronizacja katalogów
-        -T czas_snu (opcjonalny) - oznacza ustawienie innagegaeagegaeego czasu snu demona niż domyślne 5 minut
+        -T czas_snu (opcjonalny) - oznacza ustawienie ingo czasu snu demona niż domyślne 5 minut
         -S prog - oznacza ustawienie progu dzielącego pliki małe od dużych
         -V - oznacza tryb "verbose" (logowanie do sysloga i konsoli)
 
@@ -42,7 +42,4 @@ Dodatkowo:
 ###### *3. Dodatek:*
  * inna forma kopiowania plików (zamiast read/write): mmap/write (mapowanie w całości w pamięci)
  * próg dzielący pliki małe od dużych: dodatkowy opcjonalny parametr -s
-
-
 ### Lista TO-DO jest w zakadce "Issues"!
- 
