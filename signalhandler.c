@@ -1,10 +1,10 @@
 void signalhandler(int signum) {
 	if (signum == SIGTERM) {
-		closelog(); // zamkniecie logow
+		closelog();
 		syslog(LOG_NOTICE, "Zakonczono dzialanie demona. [kill]");
 		exit(signum);
 	}
 	else if (signum == SIGUSR1) {
-		flagaSignal = 1;
+		g_flagaSignal = 1;
 	}
 }

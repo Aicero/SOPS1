@@ -1,0 +1,16 @@
+Skład grupy:
+ - Gabriel Mackiewicz
+ - Tomasz Osipiak
+
+Projekt: 1. Demon synchronizujący dwa podkatalogi.
+
+Poszczególne części programu:
+ - parsowanie argumentów programu z użyciem getopt
+ - obsługa opcjonalnych parametrów:
+   -R powoduje rekurencyjne przeszukiwanie katalogów
+   -T do zmiany czasu snu
+   -S do przekazania progu dzielącego pliki małe od dużych
+   -v do ustawienia trybu "verbose" (logi dodatkowo do konsoli)
+ - obsługa sygnałów SIGTERM i SIGUSR1 w handlerze
+ - logowanie zdarzeń do logu systemowego
+ - 
