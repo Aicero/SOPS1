@@ -13,7 +13,7 @@ Dodatkowo:
         ścieżka źródłowa (*) - musi być katalogiem
         ścieżka docelowa (*) - musi być katalogiem
         -R (opcjonalny) - oznacza rekurencyjna synchronizacja katalogów
-        -T czas_snu (opcjonalny) - oznacza ustawienie ingo czasu snu demona niż domyślne 5 minut
+        -T czas_snu (opcjonalny) - oznacza ustawienie innego czasu snu demona niż domyślne 5 minut
         -S prog - oznacza ustawienie progu dzielącego pliki małe od dużych
 
 
