@@ -19,11 +19,14 @@ void removefiles(char *folderZrodlowy, char *folderDocelowy)
 			}
 			else
 			{
+				if (ep->d_type == DT_LNK || ep->d_type == DT_UNKNOWN){
+					//Trzeba dodac tu inne typy
+					continue;
+				}
 				char FileZrodlowyPath[PATH_MAX + 1];
 				char FileDocelowyPath[PATH_MAX + 1];
 				combinePath(FileZrodlowyPath, folderZrodlowy, ep->d_name);
 				combinePath(FileDocelowyPath, folderDocelowy, ep->d_name);
-
 				if (ep->d_type == DT_DIR)
 				{
 					if(g_rekurencyjne)
