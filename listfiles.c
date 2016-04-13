@@ -30,13 +30,14 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 				if (stat(FileZrodlowyPath, &file1) < 0)
 				{
 					// logger
-					fprintf(stderr, "Nieudana proba otwarcia pliku w folderze zrodlowym %s!\n", ep->d_name);
+					//fprintf(stderr, "Nieudana proba otwarcia pliku w folderze zrodlowym %s!\n", ep->d_name);
+					loggerparam("Nieudana proga otwarcia pliku w folderze zrodlowym!", ep->d_name);
 					continue;
 				}
 
 				if (ep->d_type == DT_DIR)
 				{
-					if(g_rekurencyjne)
+					if (g_rekurencyjne)
 					{
 						if (stat(FileDocelowyPath, &file1) == -1)
 						{
@@ -53,14 +54,19 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 
 					if (stat(FileDocelowyPath, &file2) < 0)
 					{
-						// logger
-						fprintf(stderr, "Nieudana proba otworzenia pliku w folderze Docelowym. Tworzymy plik %s\n", ep->d_name);
-						if (NRMcopy(FileDocelowyPath, FileZrodlowyPath, time(NULL), file1.st_mode) != 0)
-						{
-							// logger blad tworzenia nowego pliku
+						if (g_progPodzialu == 0 /*|| rozmiarpliku < g_progPodzialu*/) {
+							if (nrmcopy(FileDocelowyPath, FileZrodlowyPath, time(NULL), file1.st_mode) != 0)
+							{
+								// logger blad tworzenia nowego pliku
+								logger("Utworzenie pliku w katalogu docelowym nie powiodlo sie.");
+							}
 						}
-
-						//MEMcopy(FileDocelowyPath, FileZrodlowyPath, time(NULL), file1.st_mode);
+						else {
+							if (MEMcopy(FileDocelowyPath, FileZrodlowyPath, time(NULL), file1.st_mode) != 0) {
+								// logger blad tworzenia nowego pliku
+								logger("Utworzenie pliku w katalogu docelowym nie powiodlo sie.");
+							}
+						}
 					}
 					else
 					{
@@ -68,18 +74,26 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 						if (Czas1 > Czas2)
 						{
 							mode_t mode = file1.st_mode;
-							if (NRMcopy(FileDocelowyPath, FileZrodlowyPath, Czas1, mode) != 0) {
-								// logger blad kopiowania
+
+							if (g_progPodzialu == 0 /*|| rozmiarpliku < g_progPodzialu*/) {
+								if (nrmcopy(FileDocelowyPath, FileZrodlowyPath, Czas1, mode) != 0) {
+									// logger blad kopiowania
+									logger("Blad kopiowania pliku do katalogu docelowego.");
+								}
 							}
-							//MEMcopy(FileDocelowyPath, FileZrodlowyPath, Czas1, mode);
+							else {
+								if (MEMcopy(FileDocelowyPath, FileZrodlowyPath, Czas1, mode) != 0) {
+									// logger blad kopiowania
+									logger("Blad kopiowania pliku do katalogu docelowego.");
+								}
+							}
 						}
 					}
 					continue;
 				}
 				else
 				{
-					// logger
-					logger("Natrafiono na inny typ pliku");
+					logger("Natrafiono na inny typ pliku.");
 				}
 			}
 		(void)closedir(dp);
@@ -87,6 +101,7 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 	else
 	{
 		// logger
-		perror("Nie mozna otworzyc katalogu");
+		logger("Blad otwierania katalogu!");
+		//perror("Nie mozna otworzyc katalogu");
 	}
 }
