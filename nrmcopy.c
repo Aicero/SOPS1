@@ -1,5 +1,5 @@
 /*
-Kopiowanie plikÃ³w uzywajac read/write
+Kopiowanie plików uzywajac read/write
 */
 #include <utime.h>
 #define BUF_SIZE 8192
@@ -11,7 +11,7 @@ int nrmcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 	ssize_t inputBytes, outputBytes;    /* Number of bytes returned by read() and write() */
 	char buffer[BUF_SIZE];      /* Character buffer */
 
-	/* Tworzenie deskryptorÃ³w */
+								/* Tworzenie deskryptorów */
 	iZrodlowy = open(pathZrodlowy, O_RDONLY);
 	if (iZrodlowy == -1)
 	{
@@ -20,7 +20,7 @@ int nrmcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 		return -1;
 	}
 
-	/* Tworzenie deskryptorÃ³w */
+	/* Tworzenie deskryptorów */
 	iDocelowy = open(pathDocelowy, O_WRONLY | O_TRUNC | O_CREAT, modeZrodlowy);
 	if (iDocelowy == -1)
 	{
@@ -52,6 +52,8 @@ int nrmcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 		//perror(pathDocelowy);
 		return -1;
 	}
-	loggerparam("Plik skopiowany do folderu docelowego.", ep->d_name);
+	char* bname;
+	//bname = &(basename(pathDocelowy));
+	//loggerparam("Plik skopiowany do folderu docelowego.", &(basename(pathDocelowy)));
 	return 0;
 }

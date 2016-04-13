@@ -80,11 +80,17 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 									// logger blad kopiowania
 									logger("Blad kopiowania pliku do katalogu docelowego.");
 								}
+								else {
+									loggerparam("Plik skopiowany do folderu docelowego.", ep->d_name);
+								}
 							}
 							else {
 								if (MEMcopy(FileDocelowyPath, FileZrodlowyPath, Czas1, mode) != 0) {
 									// logger blad kopiowania
 									logger("Blad kopiowania pliku do katalogu docelowego.");
+								}
+								else {
+									loggerparam("Plik skopiowany do folderu docelowego.", ep->d_name);
 								}
 							}
 						}
