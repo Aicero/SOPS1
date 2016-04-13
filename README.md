@@ -15,6 +15,7 @@ Dodatkowo:
         -R (opcjonalny) - oznacza rekurencyjna synchronizacja katalogów
         -T czas_snu (opcjonalny) - oznacza ustawienie innego czasu snu demona niż domyślne 5 minut
         -S prog - oznacza ustawienie progu dzielącego pliki małe od dużych
+        -V - oznacza tryb "verbose" (logowanie do sysloga i konsoli)
 
 
 
