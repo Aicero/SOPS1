@@ -41,7 +41,7 @@ Dodatkowo:
 
 ###### *3. Dodatek:*
  * inna forma kopiowania plików (zamiast read/write): mmap/write (mapowanie w całości w pamięci)
- * próg dzielący pliki małe od dużych: dodatkowy opcjonalny parametr
+ * próg dzielący pliki małe od dużych: dodatkowy opcjonalny parametr -s
 
 
 ### Lista TO-DO jest w zakadce "Issues"!
