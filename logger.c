@@ -8,5 +8,5 @@ void loggerparam(char* message, char* sParam) {
 	time_t currentTime;
 	currentTime = time(NULL);
 	syslog(LOG_INFO, "%s Parametr: %s", message, sParam);
-	if (g_verbose) fprintf(stderr, "%s %s %s", ctime(&currentTime), message, sParam);
+	if (g_verbose) fprintf(stderr, "%s %s", ctime(&currentTime), message);
 }
