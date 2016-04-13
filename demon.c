@@ -59,11 +59,19 @@ int main(int argc, char * argv[]) {
 					fprintf(stderr, "--Podano bledny czas spania.\nUzycie: -t \"czas w sekundach\"\n");
 					exit(EXIT_FAILURE);
 				}
+				if(g_refreshTime < 0){
+					fprintf(stderr, "--Czas spania powinien miec wartosc dodatnia.\nUzycie: -s \"prog w bajtach\"\n");
+					exit(EXIT_FAILURE);
+				}
 				break;
 			case 'S':
 			case 's':
 				if (sscanf(optarg, "%i", &g_progPodzialu) != 1) {
 					fprintf(stderr, "--Podano bledny prog.\nUzycie: -s \"prog w bajtach\"\n");
+					exit(EXIT_FAILURE);
+				}
+				if(g_progPodzialu < 0){
+					fprintf(stderr, "--Prog powinien miec wartosc dodatnia.\nUzycie: -s \"prog w bajtach\"\n");
 					exit(EXIT_FAILURE);
 				}
 				break;
