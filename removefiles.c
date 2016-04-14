@@ -35,7 +35,7 @@ void removefiles(char *folderZrodlowy, char *folderDocelowy)
 						{
 							// logger
 							fprintf(stderr, "Folder nie istnieje w folderze zrodlowym. Usuwamy folder %s\n", FileDocelowyPath);
-							remove(FileDocelowyPath);
+							rmrf(FileDocelowyPath);
 						}
 					}
 					continue;

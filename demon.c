@@ -19,6 +19,7 @@
 #include "nrmcopy.c"
 #include "combinePath.c"
 #include "MEMcopy.c"
+#include "fremover.c"
 
 
 int main(int argc, char * argv[]) {
