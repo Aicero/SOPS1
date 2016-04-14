@@ -60,7 +60,7 @@ int main(int argc, char * argv[]) {
 					fprintf(stderr, "--Podano bledny czas spania.\nUzycie: -t \"czas w sekundach\"\n");
 					exit(EXIT_FAILURE);
 				}
-				if(g_refreshTime < 0){
+				if (g_refreshTime < 0) {
 					fprintf(stderr, "--Czas spania powinien miec wartosc dodatnia.\nUzycie: -t \"prog w bajtach\"\n");
 					exit(EXIT_FAILURE);
 				}
@@ -71,7 +71,7 @@ int main(int argc, char * argv[]) {
 					fprintf(stderr, "--Podano bledny prog.\nUzycie: -s \"prog w bajtach\"\n");
 					exit(EXIT_FAILURE);
 				}
-				if(g_progPodzialu < 0){
+				if (g_progPodzialu < 0) {
 					fprintf(stderr, "--Prog powinien miec wartosc dodatnia.\nUzycie: -s \"prog w bajtach\"\n");
 					exit(EXIT_FAILURE);
 				}
@@ -119,7 +119,7 @@ int main(int argc, char * argv[]) {
 		/* Open any logs here */
 		setlogmask(LOG_UPTO(LOG_INFO));
 		openlog("SOPS1-demon", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
-		syslog(LOG_NOTICE, "Program uruchomiony przez uzytkownika %d", getuid());
+		logger("Demon zostal uruchomiony pomyslnie.");
 
 		/* Create a new SID for the child process */
 		sid = setsid();
@@ -134,23 +134,23 @@ int main(int argc, char * argv[]) {
 
 		/* The Big Loop */
 		while (1) {
-			if(!opendir(g_pathZrodlowy) || !opendir(g_pathDocelowy))
+			if (!opendir(g_pathZrodlowy) || !opendir(g_pathDocelowy))
 			{
 				logger("Jeden z folderow zostal usuniety!");
 				exit(EXIT_FAILURE);
 			}
 			if (g_flagaSignal == 0) {
-				logger("Demon wybudzony automatycznie.\n");
+				logger("Demon wybudzony automatycznie.");
 				listfiles(g_pathZrodlowy, g_pathDocelowy);
 				removefiles(g_pathZrodlowy, g_pathDocelowy);
 			}
 			else {
-				logger("Demon wybudzony przez SIGUSR1.\n");
+				logger("Demon wybudzony przez SIGUSR1.");
 				listfiles(g_pathZrodlowy, g_pathDocelowy);
 				removefiles(g_pathZrodlowy, g_pathDocelowy);
 				g_flagaSignal = 0;
 			}
-			logger("Demon zostal uspiony.\n");
+			logger("Demon zostal uspiony.");
 			sleep(g_refreshTime);
 		}
 		exit(EXIT_SUCCESS);
