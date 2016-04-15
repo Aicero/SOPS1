@@ -3,7 +3,7 @@ Usuwanie folderów wraz z zawartością.
 */
 #include <ftw.h>
 #define FTW_DEPTH 8
-#define FTW_PHYS 2
+#define FTW_PHYS 1
 
 int unlinkthis(char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf)
 {
