@@ -142,13 +142,22 @@ int main(int argc, char * argv[]) {
 			}
 			if (g_flagaSignal == 0) {
 				loggererr("Demon wybudzony automatycznie.", 0);
+				g_duringSynchronization = 1;
 				listfiles(g_pathZrodlowy, g_pathDocelowy);
 				removefiles(g_pathZrodlowy, g_pathDocelowy);
+				g_duringSynchronization = 0;
 			}
 			else {
+				if (g_duringSynchronization == 1) {
+					g_flagaSignal = 0;
+					sleep(g_refreshTime);
+					continue;
+				}
 				loggererr("Demon wybudzony przez SIGUSR1.", 0);
+				g_duringSynchronization = 1;
 				listfiles(g_pathZrodlowy, g_pathDocelowy);
 				removefiles(g_pathZrodlowy, g_pathDocelowy);
+				g_duringSynchronization = 0;
 				g_flagaSignal = 0;
 			}
 			loggererr("Demon zostal uspiony.", 0);
