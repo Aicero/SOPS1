@@ -1,12 +1,9 @@
-void signalhandler(int signum);
-void listfiles(char *folder, char *path);
-int checkFile(char *plik);
-//void logger(char* message);
-//void loggerparam(char* message, char* sParam);
-void loggererr(char* message, int err);
-void loggerparamerr(char* message, char* sParam, int err);
-void removefiles(char *folderZrodlowy, char *folderDocelowy);
-void combinePath(char* combined, const char* katalog, const char* nazwa);
+void signalhandler(int);
+void listfiles(const char*,const char*);
+void loggererr(char*, int);
+void loggerparamerr(char*, char*, int);
+void removefiles(const char*, const char*);
+void combinePath(char*, const char*, const char*);
 
 char g_pathZrodlowy[PATH_MAX + 1];
 char g_pathDocelowy[PATH_MAX + 1];

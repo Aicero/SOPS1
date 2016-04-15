@@ -2,7 +2,7 @@
 Wypisywanie listy plikow dostepnych w folderze podanym jako argument.
 */
 
-void listfiles(char *folderZrodlowy, char *folderDocelowy)
+void listfiles(const char *folderZrodlowy,const char *folderDocelowy)
 {
 	struct stat file1;
 	struct stat file2;
