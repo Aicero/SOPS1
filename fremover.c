@@ -1,13 +1,15 @@
 #include <ftw.h>
 #define FTW_DEPTH 8
 #define FTW_PHYS 2
+
 int unlinkthis(char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf)
 {
 	int rv = remove(fpath);
-	loggerparam("Usuwanie: ", fpath);
-	if (rv)
-		perror(fpath);
-	return rv;
+	if (rv) {
+		return rv;
+	}
+	loggerparamerr("Usunieto element nieobecny w folderze zrodlowym.", fpath, 0);
+	return 0;
 }
 
 int rmrf(char *path)

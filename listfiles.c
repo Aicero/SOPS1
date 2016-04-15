@@ -13,9 +13,7 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 	dp = opendir(folderZrodlowy);
 	if (dp == NULL)
 	{
-		// logger
 		loggererr("Blad otwierania katalogu!", errno);
-		//perror("Nie mozna otworzyc katalogu");
 		return;
 	}
 
@@ -44,17 +42,14 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 				continue;
 			}
 
-			if (ep->d_type == DT_DIR)
+			if (ep->d_type == DT_DIR && g_rekurencyjne)
 			{
-				if (g_rekurencyjne)
+				if (stat(FileDocelowyPath, &file1) == -1)
 				{
-					if (stat(FileDocelowyPath, &file1) == -1)
-					{
-						mkdir(FileDocelowyPath, file1.st_mode);
-					}
-					listfiles(FileZrodlowyPath, FileDocelowyPath);
-					removefiles(FileZrodlowyPath, FileDocelowyPath);
+					mkdir(FileDocelowyPath, file1.st_mode);
 				}
+				listfiles(FileZrodlowyPath, FileDocelowyPath);
+				removefiles(FileZrodlowyPath, FileDocelowyPath);
 				continue;
 			}
 			else if (ep->d_type == DT_REG)
@@ -102,7 +97,7 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 			}
 			else
 			{
-				logger("Natrafiono na inny typ pliku.");
+				loggererr("Natrafiono na inny typ pliku.", 0);
 			}
 		}
 	}
