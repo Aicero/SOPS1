@@ -1,9 +1,9 @@
 /*
-Kopiowanie plików uzywajac mmap
+Kopiowanie plikÃ³w uzywajac mmap
 */
 #include <sys/mman.h>
 
-int MEMcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t modeZrodlowy)
+int memcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t modeZrodlowy)
 {
 	int iZrodlowy, iDocelowy;
 	void* source;
@@ -12,7 +12,7 @@ int MEMcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 
 	/* Zrodlo */
 	if (stat(pathZrodlowy, &s) != 0) {
-		/* Obsluga bledu jakby co */
+		return -1;
 	}
 	filesize = s.st_size;
 	iZrodlowy = open(pathZrodlowy, O_RDONLY);
@@ -22,7 +22,8 @@ int MEMcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 	source = mmap(NULL, filesize, PROT_READ, MAP_PRIVATE, iZrodlowy, 0);
 	if (source == MAP_FAILED) {
 		/* Obsluzyc blad */
-		perror("mmap source");
+		//perror("mmap source");
+		return -1;
 	}
 
 	/* Kopiowanie */
@@ -37,9 +38,11 @@ int MEMcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 	if (utime(pathDocelowy, &nowy_czas) < 0)
 	{
 		perror(pathDocelowy);
+		return -1;
 	}
 	char* bname;
 	bname = basename(pathDocelowy);
-	loggerparam("Plik skopiowany do folderu docelowego. mmap/write",bname);
+	logger("halohalohalo");
+	loggerparam("Plik skopiowany do folderu docelowego. mmap/write", bname);
 	return 0;
 }

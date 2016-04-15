@@ -15,7 +15,7 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 	{
 		while (ep = readdir(dp))
 
-			if (!strcmp(ep->d_name, ".") || !strcmp(ep->d_name, "..") /*|| ep->d_name[strlen(ep->d_name)-1] != '~'*/)
+			if (!strcmp(ep->d_name, ".") || !strcmp(ep->d_name, ".."))
 			{
 				continue;
 				//Katalogi specjalne, nie powinno nic robic.
@@ -33,9 +33,7 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 				
 				if (stat(FileZrodlowyPath, &file1) < 0)
 				{
-					// logger
-					//fprintf(stderr, "Nieudana proba otwarcia pliku w folderze zrodlowym %s!\n", ep->d_name);
-					loggerparam("Nieudana proga otwarcia pliku w folderze zrodlowym!", ep->d_name);
+					loggerparam("Nieudana proba otwarcia pliku w folderze zrodlowym!", ep->d_name);
 					continue;
 				}
 				
@@ -52,7 +50,7 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 					}
 					continue;
 				}
-				else if (ep->d_type == DT_REG) // tu dodaæ wybór metody kopiowania
+				else if (ep->d_type == DT_REG)
 				{
 					time_t Czas1 = file1.st_mtime;
 
@@ -62,13 +60,13 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 							if (nrmcopy(FileDocelowyPath, FileZrodlowyPath, time(NULL), file1.st_mode) != 0)
 							{
 								// logger blad tworzenia nowego pliku
-								logger("Utworzenie pliku w katalogu docelowym nie powiodlo sie.");
+								logger("[read/write] Utworzenie pliku w katalogu docelowym nie powiodlo sie.");
 							}
 						}
 						else {
-							if (MEMcopy(FileDocelowyPath, FileZrodlowyPath, time(NULL), file1.st_mode) != 0) {
+							if (memcopy(FileDocelowyPath, FileZrodlowyPath, time(NULL), file1.st_mode) != 0) {
 								// logger blad tworzenia nowego pliku
-								logger("Utworzenie pliku w katalogu docelowym nie powiodlo sie.");
+								logger("[mmap/write] Utworzenie pliku w katalogu docelowym nie powiodlo sie.");
 							}
 						}
 					}
@@ -82,19 +80,16 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 							if (g_progPodzialu == 0 || file1.st_size < (size_t)g_progPodzialu) {
 								if (nrmcopy(FileDocelowyPath, FileZrodlowyPath, Czas1, mode) != 0) {
 									// logger blad kopiowania
-									logger("Blad kopiowania pliku do katalogu docelowego. read/write\n");
-								}
-								else {
-									loggerparam("Plik skopiowany do folderu docelowego. read/write\n", ep->d_name);
+									logger("[read/write] Blad kopiowania pliku do katalogu docelowego.");
 								}
 							}
 							else {
-								if (MEMcopy(FileDocelowyPath, FileZrodlowyPath, Czas1, mode) != 0) {
+								if (memcopy(FileDocelowyPath, FileZrodlowyPath, Czas1, mode) != 0) {
 									// logger blad kopiowania
-									logger("Blad kopiowania pliku do katalogu docelowego. mmap/write\n");
+									logger("[mmap/write] Blad kopiowania pliku do katalogu docelowego.");
 								}
 								else {
-									loggerparam("Plik skopiowany do folderu docelowego. mmap/write\n", ep->d_name);
+									loggerparam("[mmap/write] Plik skopiowany do folderu docelowego.", ep->d_name);
 								}
 							}
 						}

@@ -11,6 +11,7 @@
 #include <dirent.h>
 #include <time.h>
 #include <libgen.h>
+#include <limits.h>
 #include "globals.c"
 #include "listfiles.c"
 #include "logger.c"
@@ -18,7 +19,7 @@
 #include "removefiles.c"
 #include "nrmcopy.c"
 #include "combinePath.c"
-#include "MEMcopy.c"
+#include "memcopy.c"
 #include "fremover.c"
 
 
