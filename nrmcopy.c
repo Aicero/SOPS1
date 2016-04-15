@@ -15,14 +15,14 @@ int nrmcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 	iZrodlowy = open(pathZrodlowy, O_RDONLY);
 	if (iZrodlowy == -1)
 	{
-		return -1;
+		return errno;
 	}
 
 	/* Tworzenie deskryptorow */
 	iDocelowy = open(pathDocelowy, O_WRONLY | O_TRUNC | O_CREAT, modeZrodlowy);
 	if (iDocelowy == -1)
 	{
-		return -1;
+		return errno;
 	}
 
 	/* Kopiowanie */
@@ -43,10 +43,10 @@ int nrmcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 	nowy_czas.modtime = czasZrodlowy;
 	if (utime(pathDocelowy, &nowy_czas) < 0)
 	{
-		return -1;
+		return errno;
 	}
 	char* bname;
 	bname = basename(pathDocelowy);
-	loggerparam("[read/write] Plik skopiowany do folderu docelowego.", bname);
+	loggerparamerr("[read/write] Plik skopiowany do folderu docelowego.", bname, 0);
 	return 0;
 }

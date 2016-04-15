@@ -1,5 +1,5 @@
 /*
-Kopiowanie plików uzywajac mmap
+Kopiowanie plikow uzywajac mmap
 */
 #include <sys/mman.h>
 
@@ -12,7 +12,7 @@ int memcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 
 	/* Zrodlo */
 	if (stat(pathZrodlowy, &s) != 0) {
-		return -1;
+		return errno;
 	}
 	filesize = s.st_size;
 	iZrodlowy = open(pathZrodlowy, O_RDONLY);
@@ -21,9 +21,7 @@ int memcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 
 	source = mmap(NULL, filesize, PROT_READ, MAP_PRIVATE, iZrodlowy, 0);
 	if (source == MAP_FAILED) {
-		/* Obsluzyc blad */
-		//perror("mmap source");
-		return -1;
+		return errno;
 	}
 
 	/* Kopiowanie */
@@ -37,12 +35,11 @@ int memcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 	nowy_czas.modtime = czasZrodlowy;
 	if (utime(pathDocelowy, &nowy_czas) < 0)
 	{
-		perror(pathDocelowy);
-		return -1;
+		return errno;
 	}
+
 	char* bname;
 	bname = basename(pathDocelowy);
-	logger("halohalohalo");
-	loggerparam("Plik skopiowany do folderu docelowego. mmap/write", bname);
+	loggerparamerr("Plik skopiowany do folderu docelowego. mmap/write", bname, 0);
 	return 0;
 }
