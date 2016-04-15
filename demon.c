@@ -137,7 +137,7 @@ int main(int argc, char * argv[]) {
 		while (1) {
 			if (!opendir(g_pathZrodlowy) || !opendir(g_pathDocelowy))
 			{
-				loggererr("Jeden z folderow zostal usuniety! Demon umarl.", 0);
+				loggererr("Otwarcie folderu zrodlowego lub docelowego nie powiod³o sie. Demon umarl.", errno);
 				exit(EXIT_FAILURE);
 			}
 			if (g_flagaSignal == 0) {
