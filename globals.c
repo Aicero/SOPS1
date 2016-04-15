@@ -3,6 +3,8 @@ void listfiles(char *folder, char *path);
 int checkFile(char *plik);
 void logger(char* message);
 void loggerparam(char* message, char* sParam);
+void loggererr(char* message, int err);
+void loggerparamerr(char* message, char* sParam, int err);
 void removefiles(char *folderZrodlowy, char *folderDocelowy);
 void combinePath(char* combined, const char* katalog, const char* nazwa);
 

@@ -120,7 +120,7 @@ int main(int argc, char * argv[]) {
 		/* Open any logs here */
 		setlogmask(LOG_UPTO(LOG_INFO));
 		openlog("SOPS1-demon", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
-		logger("Demon zostal uruchomiony pomyslnie.");
+		loggererr("Demon zostal uruchomiony pomyslnie.", 0);
 
 		/* Create a new SID for the child process */
 		sid = setsid();
@@ -137,21 +137,21 @@ int main(int argc, char * argv[]) {
 		while (1) {
 			if (!opendir(g_pathZrodlowy) || !opendir(g_pathDocelowy))
 			{
-				logger("Jeden z folderow zostal usuniety!");
+				loggererr("Jeden z folderow zostal usuniety! Demon umarl.", 0);
 				exit(EXIT_FAILURE);
 			}
 			if (g_flagaSignal == 0) {
-				logger("Demon wybudzony automatycznie.");
+				loggererr("Demon wybudzony automatycznie.", 0);
 				listfiles(g_pathZrodlowy, g_pathDocelowy);
 				removefiles(g_pathZrodlowy, g_pathDocelowy);
 			}
 			else {
-				logger("Demon wybudzony przez SIGUSR1.");
+				loggererr("Demon wybudzony przez SIGUSR1.", 0);
 				listfiles(g_pathZrodlowy, g_pathDocelowy);
 				removefiles(g_pathZrodlowy, g_pathDocelowy);
 				g_flagaSignal = 0;
 			}
-			logger("Demon zostal uspiony.");
+			loggererr("Demon zostal uspiony.", 0);
 			sleep(g_refreshTime);
 		}
 		exit(EXIT_SUCCESS);
