@@ -1,10 +1,3 @@
-void signalhandler(int);
-void listfiles(const char*,const char*);
-void loggererr(char*, int);
-void loggerparamerr(char*, char*, int);
-void removefiles(const char*, const char*);
-void combinePath(char*, const char*, const char*);
-
 char g_pathZrodlowy[PATH_MAX + 1];
 char g_pathDocelowy[PATH_MAX + 1];
 int g_rekurencyjne = 0;

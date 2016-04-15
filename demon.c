@@ -1,26 +1,4 @@
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <stdio.h>
-#include <signal.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <unistd.h>
-#include <syslog.h>
-#include <string.h>
-#include <dirent.h>
-#include <time.h>
-#include <libgen.h>
-#include <limits.h>
-#include "globals.c"
-#include "listfiles.c"
-#include "logger.c"
-#include "signalhandler.c"
-#include "removefiles.c"
-#include "nrmcopy.c"
-#include "combinePath.c"
-#include "memcopy.c"
-#include "fremover.c"
+#include "demon.h"
 
 
 int main(int argc, char * argv[]) {
@@ -137,7 +115,7 @@ int main(int argc, char * argv[]) {
 		while (1) {
 			if (!opendir(g_pathZrodlowy) || !opendir(g_pathDocelowy))
 			{
-				loggererr("Otwarcie folderu zrodlowego lub docelowego nie powiod³o sie. Demon umarl.", errno);
+				loggererr("Otwarcie folderu zrodlowego lub docelowego nie powiodï¿½o sie. Demon umarl.", errno);
 				exit(EXIT_FAILURE);
 			}
 			if (g_flagaSignal == 0) {
