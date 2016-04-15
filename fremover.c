@@ -1,3 +1,6 @@
+/*
+Usuwanie folderów wraz z zawartością.
+*/
 #include <ftw.h>
 #define FTW_DEPTH 8
 #define FTW_PHYS 2
