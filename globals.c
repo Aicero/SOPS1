@@ -1,6 +1,10 @@
-#include <limits.h>
-#include <time.h>
-
+void signalhandler(int signum);
+void listfiles(char *folder, char *path);
+int checkFile(char *plik);
+void logger(char* message);
+void loggerparam(char* message, char* sParam);
+void removefiles(char *folderZrodlowy, char *folderDocelowy);
+void combinePath(char* combined, const char* katalog, const char* nazwa);
 
 char g_pathZrodlowy[PATH_MAX + 1];
 char g_pathDocelowy[PATH_MAX + 1];
@@ -10,11 +14,3 @@ int g_progPodzialu = 0;
 volatile int g_flagaSignal = 0;
 volatile int g_duringSynchronization = 0;
 volatile int g_verbose = 0;
-
-void signalhandler(int signum);
-void listfiles(char *folder, char *path);
-int checkFile(char *plik);
-void logger(char* message);
-void loggerparam(char* message, char* sParam);
-void removefiles(char *folderZrodlowy, char *folderDocelowy);
-void combinePath(char* combined, const char* katalog, const char* nazwa);
