@@ -19,7 +19,7 @@ int nrmcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 	}
 
 	/* Tworzenie deskryptorow */
-	iDocelowy = open(pathDocelowy, O_WRONLY | O_TRUNC | O_CREAT, modeZrodlowy);
+	iDocelowy = open(pathDocelowy, O_WRONLY | O_TRUNC | O_CREAT, 777);
 	if (iDocelowy == -1)
 	{
 		return errno;
@@ -47,6 +47,7 @@ int nrmcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 	}
 	char* bname;
 	bname = basename(pathDocelowy);
+	chmod(pathDocelowy, modeZrodlowy);
 	loggerparamerr("[read/write] Plik skopiowany do folderu docelowego.", bname, 0);
 	return 0;
 }
