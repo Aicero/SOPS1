@@ -46,10 +46,11 @@ void listfiles(char *folderZrodlowy, char *folderDocelowy)
 			{
 				if (stat(FileDocelowyPath, &file1) == -1)
 				{
-					mkdir(FileDocelowyPath, file1.st_mode);
+					mkdir(FileDocelowyPath, 777);
 				}
 				listfiles(FileZrodlowyPath, FileDocelowyPath);
 				removefiles(FileZrodlowyPath, FileDocelowyPath);
+				chmod(FileDocelowyPath, file1.st_mode);
 				continue;
 			}
 			else if (ep->d_type == DT_REG)
