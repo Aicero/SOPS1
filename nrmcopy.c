@@ -8,8 +8,8 @@ int nrmcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 {
 	remove(pathDocelowy);
 	int iZrodlowy, iDocelowy;
-	ssize_t inputBytes, outputBytes;    /* Number of bytes returned by read() and write() */
-	char buffer[BUF_SIZE];      /* Character buffer */
+	ssize_t inputBytes, outputBytes;
+	char buffer[BUF_SIZE];      /* Char buffer */
 
 	/* Tworzenie deskryptorow */
 	iZrodlowy = open(pathZrodlowy, O_RDONLY);
