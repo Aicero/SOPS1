@@ -16,7 +16,7 @@ int memcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 	}
 	filesize = s.st_size;
 	iZrodlowy = open(pathZrodlowy, O_RDONLY);
-	iDocelowy = open(pathDocelowy, O_RDWR | O_CREAT, modeZrodlowy);
+	iDocelowy = open(pathDocelowy, O_RDWR | O_CREAT, 777);
 	ftruncate(iDocelowy, filesize);
 
 	source = mmap(NULL, filesize, PROT_READ, MAP_PRIVATE, iZrodlowy, 0);
@@ -40,6 +40,7 @@ int memcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 
 	char* bname;
 	bname = basename(pathDocelowy);
+	chmod(pathDocelowy, modeZrodlowy);
 	loggerparamerr("Plik skopiowany do folderu docelowego. mmap/write", bname, 0);
 	return 0;
 }
