@@ -1,5 +1,5 @@
 /*
-Kopiowanie plikÃ³w uzywajac mmap
+Kopiowanie plików uzywajac mmap
 */
 #include <sys/mman.h>
 
