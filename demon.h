@@ -17,13 +17,9 @@
 
 /* FUNCTION DECLARATIONS */
 void signalhandler(int);
-void lsfiles(const char*,const char*);
 void logerr(const char*,const  int);
 void logparamerr(const char*,const char*,const int);
-void rmfiles(const char*, const char*);
 void cmbpath(char*, const char*, const char*);
-int nrmcopy(char*, char*, time_t, mode_t);
-int memmcopy(char*, char*, time_t, mode_t);
 
 /* DEMON FLAGS & GLOBAL VALUES */
 char g_pathZrodlowy[PATH_MAX + 1];
@@ -35,10 +31,7 @@ volatile int g_flagSignal = 0;
 volatile int g_duringSynchronization = 0;
 volatile int g_verbose = 0;
 
-#include "fileops/copy.c"
-#include "fileops/lsfiles.c"
-#include "fileops/rmfiles.c"
-#include "fileops/rmvdir.c"
+#include "fileops/fileops.h"
 #include "logger.c"
 #include "signalhandler.c"
 #include "cmbpath.c"

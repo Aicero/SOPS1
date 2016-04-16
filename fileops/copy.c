@@ -2,9 +2,6 @@
 * Kopiowanie plikow uzywajac read/write
 */
 
-#include <sys/mman.h>
-#define BUF_SIZE 8192
-
 int nrmcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t modeZrodlowy)
 {
 	remove(pathDocelowy);
