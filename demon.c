@@ -119,17 +119,23 @@ int main(int argc, char * argv[]) {
 				logerr("Otwarcie folderu zrodlowego lub docelowego nie powiodlo sie. Demon umarl.", errno);
 				exit(EXIT_FAILURE);
 			}
-			if (flags & SYNCHRONIZATION) {
+			
+			if (flags & SYNCHRONIZATION) 
+			{
 				continue;
 			}
-			if (!(flags & FLAG_SIGNAL)) {
+			
+			if (!(flags & FLAG_SIGNAL)) 
+			{
 				logerr("Demon wybudzony automatycznie.", 0);
 				flags |= SYNCHRONIZATION; // ustawienie flagi SYNCHRONIZATION
 				lsfiles(g_pathZrodlowy, g_pathDocelowy);
 				rmfiles(g_pathZrodlowy, g_pathDocelowy);
 				flags &= ~SYNCHRONIZATION; // wylaczenie flagi SYNCHRONIZATION
 			}
-			else {
+			
+			else 
+			{
 				logerr("Demon wybudzony przez SIGUSR1.", 0);
 				flags |= SYNCHRONIZATION; // ustawienie flagi SYNCHRONIZATION
 				lsfiles(g_pathZrodlowy, g_pathDocelowy);
@@ -137,6 +143,7 @@ int main(int argc, char * argv[]) {
 				flags &= ~SYNCHRONIZATION; // wylaczenie flagi SYNCHRONIZATION
 				flags &= ~FLAG_SIGNAL; // wylaczenie flagi FLAG_SIGNAL
 			}
+			
 			logerr("Demon zostal uspiony.", 0);
 			sleep(g_refreshTime);
 		}
