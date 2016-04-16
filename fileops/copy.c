@@ -2,7 +2,7 @@
 * Kopiowanie plikow uzywajac read/write
 */
 
-int nrmcopy(const char* pathDocelowy,const char* pathZrodlowy, time_t czasZrodlowy, mode_t modeZrodlowy)
+int nrmcopy(const char* pathDocelowy, const char* pathZrodlowy, time_t czasZrodlowy, mode_t modeZrodlowy)
 {
 	int iZrodlowy, iDocelowy;
 	ssize_t inputBytes, outputBytes;
@@ -51,7 +51,7 @@ int nrmcopy(const char* pathDocelowy,const char* pathZrodlowy, time_t czasZrodlo
 /*
 * Kopiowanie plikow uzywajac mmap/write
 */
-int memcopy(const char* pathDocelowy,const char* pathZrodlowy, time_t czasZrodlowy, mode_t modeZrodlowy)
+int memcopy(const char* pathDocelowy, const char* pathZrodlowy, time_t czasZrodlowy, mode_t modeZrodlowy)
 {
 	int iZrodlowy, iDocelowy;
 	void* source;
@@ -63,7 +63,7 @@ int memcopy(const char* pathDocelowy,const char* pathZrodlowy, time_t czasZrodlo
 		return errno;
 	}
 	filesize = s.st_size;
-	
+
 	/* Tworzenie deskryptorow */
 	iZrodlowy = open(pathZrodlowy, O_RDONLY);
 	if (iZrodlowy == -1)
@@ -77,7 +77,7 @@ int memcopy(const char* pathDocelowy,const char* pathZrodlowy, time_t czasZrodlo
 	{
 		return errno;
 	}
-	
+
 	ftruncate(iDocelowy, filesize);
 
 	source = mmap(NULL, filesize, PROT_READ, MAP_PRIVATE, iZrodlowy, 0);

@@ -6,11 +6,11 @@
 #include "../demon.h"
 #define BUF_SIZE 8192
 
-void lsfiles(const char*,const char*);
+void lsfiles(const char*, const char*);
 void rmfiles(const char*, const char*);
 void cmbpath(char*, const char*, const char*);
-int nrmcopy(const char*,const char*, time_t, mode_t);
-int memmcopy(const char*,const char*, time_t, mode_t);
+int nrmcopy(const char*, const char*, time_t, mode_t);
+int memmcopy(const char*, const char*, time_t, mode_t);
 
 #include "copy.c"
 #include "lsfiles.c"

@@ -108,24 +108,24 @@ int main(int argc, char * argv[]) {
 		close(STDIN_FILENO);
 		if (!(flags & VERBOSE)) close(STDOUT_FILENO);
 		if (!(flags & VERBOSE)) close(STDERR_FILENO);
-		
+
 		/* The Big Loop */
 		while (1) {
 			signal(SIGTERM, signalhandler);
 			signal(SIGUSR1, sigusrhandler);
-			
+
 			if (!opendir(g_pathZrodlowy) || !opendir(g_pathDocelowy))
 			{
 				logerr("Otwarcie folderu zrodlowego lub docelowego nie powiodlo sie. Demon umarl.", errno);
 				exit(EXIT_FAILURE);
 			}
-			
-			if (flags & SYNCHRONIZATION) 
+
+			if (flags & SYNCHRONIZATION)
 			{
 				continue;
 			}
-			
-			if (!(flags & FLAG_SIGNAL)) 
+
+			if (!(flags & FLAG_SIGNAL))
 			{
 				logerr("Demon wybudzony automatycznie.", 0);
 				flags |= SYNCHRONIZATION; // ustawienie flagi SYNCHRONIZATION
@@ -133,8 +133,8 @@ int main(int argc, char * argv[]) {
 				rmfiles(g_pathZrodlowy, g_pathDocelowy);
 				flags &= ~SYNCHRONIZATION; // wylaczenie flagi SYNCHRONIZATION
 			}
-			
-			else 
+
+			else
 			{
 				logerr("Demon wybudzony przez SIGUSR1.", 0);
 				flags |= SYNCHRONIZATION; // ustawienie flagi SYNCHRONIZATION
@@ -143,7 +143,7 @@ int main(int argc, char * argv[]) {
 				flags &= ~SYNCHRONIZATION; // wylaczenie flagi SYNCHRONIZATION
 				flags &= ~FLAG_SIGNAL; // wylaczenie flagi FLAG_SIGNAL
 			}
-			
+
 			logerr("Demon zostal uspiony.", 0);
 			sleep(g_refreshTime);
 		}

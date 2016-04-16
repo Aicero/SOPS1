@@ -2,7 +2,7 @@
 * Wypisywanie listy plikow dostepnych w folderze podanym jako argument.
 */
 
-void lsfiles(const char *folderZrodlowy,const char *folderDocelowy)
+void lsfiles(const char *folderZrodlowy, const char *folderDocelowy)
 {
 	struct stat _ZrodlowyFStruct;
 	struct stat _DocelowyFStruct;
@@ -22,7 +22,7 @@ void lsfiles(const char *folderZrodlowy,const char *folderDocelowy)
 		{	/* Katalogi specjalne: . , .. zostana pominiete */
 			continue;
 		}
-		
+
 		/* Tworzenie sciezki bezposredniej do pliku/folderu */
 		char s_ZrodlowyRPath[PATH_MAX + 1];
 		char s_DocelowyRPath[PATH_MAX + 1];
@@ -34,7 +34,7 @@ void lsfiles(const char *folderZrodlowy,const char *folderDocelowy)
 			logparamerr("Nieudana proba otwarcia pliku/folderu w folderze zrodlowym!", s_ZrodlowyRPath, errno);
 			continue;
 		}
-		
+
 		/* Sprawdzenie czy sciezka prowadzi do folderu, oraz czy rekurencja == True */
 		if (S_ISDIR(_ZrodlowyFStruct.st_mode) && !(flags & RECURRENCY))
 		{	/* Foldery przy wyłączonej rekurencji są pomijane */
@@ -50,12 +50,12 @@ void lsfiles(const char *folderZrodlowy,const char *folderDocelowy)
 			/* Rekurencja */
 			lsfiles(s_ZrodlowyRPath, s_DocelowyRPath);
 			rmfiles(s_ZrodlowyRPath, s_DocelowyRPath);
-			
+
 			/* Przydzielenie praw folderu zrodlowego do docelowego */
 			chmod(s_DocelowyRPath, _ZrodlowyFStruct.st_mode);
 			continue;
 		}
-		
+
 		/* Sprawdzenie czy sciezka prowadzi do pliku */
 		else if (S_ISREG(_ZrodlowyFStruct.st_mode))
 		{
@@ -63,10 +63,10 @@ void lsfiles(const char *folderZrodlowy,const char *folderDocelowy)
 			/* Sprawdzanie czy plik istenieje w katalogu docelowym: jezeli nie -> kopiujemy plik z folderu zrodlowego */
 			if (stat(s_DocelowyRPath, &_DocelowyFStruct) < 0)
 			{
-				if (g_progPodzialu == 0 || _ZrodlowyFStruct.st_size < (size_t)g_progPodzialu) 
+				if (g_progPodzialu == 0 || _ZrodlowyFStruct.st_size < (size_t)g_progPodzialu)
 				{
 					int nrmerr = nrmcopy(s_DocelowyRPath, s_ZrodlowyRPath, time(NULL), _ZrodlowyFStruct.st_mode);
-					if (nrmerr != 0) 
+					if (nrmerr != 0)
 					{
 						logparamerr("[read/write] Utworzenie pliku w katalogu docelowym nie powiodlo sie.", s_ZrodlowyRPath, nrmerr);
 					}
@@ -75,10 +75,10 @@ void lsfiles(const char *folderZrodlowy,const char *folderDocelowy)
 						logparamerr("[read/write] Plik skopiowany do folderu docelowego.", s_DocelowyRPath, 0);
 					}
 				}
-				else 
+				else
 				{
 					int memerr = memcopy(s_DocelowyRPath, s_ZrodlowyRPath, time(NULL), _ZrodlowyFStruct.st_mode);
-					if (memerr != 0) 
+					if (memerr != 0)
 					{
 						logparamerr("[mmap/write] Utworzenie pliku w katalogu docelowym nie powiodlo sie.", s_ZrodlowyRPath, memerr);
 					}
@@ -96,10 +96,10 @@ void lsfiles(const char *folderZrodlowy,const char *folderDocelowy)
 				{
 					mode_t mode = _ZrodlowyFStruct.st_mode;
 
-					if (g_progPodzialu == 0 || _ZrodlowyFStruct.st_size < (size_t)g_progPodzialu) 
+					if (g_progPodzialu == 0 || _ZrodlowyFStruct.st_size < (size_t)g_progPodzialu)
 					{
 						int nrmerr = nrmcopy(s_DocelowyRPath, s_ZrodlowyRPath, Czas1, mode);
-						if (nrmerr != 0) 
+						if (nrmerr != 0)
 						{
 							logparamerr("[read/write] Blad kopiowania pliku do katalogu docelowego.", s_ZrodlowyRPath, nrmerr);
 						}
@@ -110,7 +110,7 @@ void lsfiles(const char *folderZrodlowy,const char *folderDocelowy)
 					}
 					else {
 						int memerr = memcopy(s_DocelowyRPath, s_ZrodlowyRPath, Czas1, mode);
-						if (memerr != 0) 
+						if (memerr != 0)
 						{
 							logparamerr("[mmap/write] Blad kopiowania pliku do katalogu docelowego.", s_ZrodlowyRPath, memerr);
 						}
