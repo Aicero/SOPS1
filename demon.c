@@ -99,7 +99,7 @@ int main(int argc, char * argv[]) {
 		/* Open any logs here */
 		setlogmask(LOG_UPTO(LOG_INFO));
 		openlog("SOPS1-demon", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
-		loggererr("Demon zostal uruchomiony pomyslnie.", 0);
+		logerr("Demon zostal uruchomiony pomyslnie.", 0);
 
 		/* Create a new SID for the child process */
 		sid = setsid();
@@ -116,11 +116,11 @@ int main(int argc, char * argv[]) {
 		while (1) {
 			if (!opendir(g_pathZrodlowy) || !opendir(g_pathDocelowy))
 			{
-				loggererr("Otwarcie folderu zrodlowego lub docelowego nie powiod�o sie. Demon umarl.", errno);
+				logerr("Otwarcie folderu zrodlowego lub docelowego nie powiodlo sie. Demon umarl.", errno);
 				exit(EXIT_FAILURE);
 			}
 			if (g_flagaSignal == 0) {
-				loggererr("Demon wybudzony automatycznie.", 0);
+				logerr("Demon wybudzony automatycznie.", 0);
 				g_duringSynchronization = 1;
 				listfiles(g_pathZrodlowy, g_pathDocelowy);
 				removefiles(g_pathZrodlowy, g_pathDocelowy);
@@ -132,14 +132,14 @@ int main(int argc, char * argv[]) {
 					sleep(g_refreshTime);
 					continue;
 				}
-				loggererr("Demon wybudzony przez SIGUSR1.", 0);
+				logerr("Demon wybudzony przez SIGUSR1.", 0);
 				g_duringSynchronization = 1;
 				listfiles(g_pathZrodlowy, g_pathDocelowy);
 				removefiles(g_pathZrodlowy, g_pathDocelowy);
 				g_duringSynchronization = 0;
 				g_flagaSignal = 0;
 			}
-			loggererr("Demon zostal uspiony.", 0);
+			logerr("Demon zostal uspiony.", 0);
 			sleep(g_refreshTime);
 		}
 		exit(EXIT_SUCCESS);

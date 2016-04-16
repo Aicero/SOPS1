@@ -10,7 +10,7 @@ int unlinkthis(const char *fpath, const struct stat *sb, int tflag, struct FTW *
 	if (rv) {
 		return rv;
 	}
-	loggerparamerr(
+	logparamerr(
 		(tflag == FTW_DP) ? "Usunieto folder nieobecny w folderze zrodlowym." :
 		(tflag == FTW_DNR) ? "Tego folderu nie mozna odczytac." :
 		(tflag == FTW_F) ? "Usunieto plik nieobecny w folderze zrodlowym" :
