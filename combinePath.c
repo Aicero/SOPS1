@@ -1,5 +1,5 @@
 /*
-Tworzenie jednej polaczonej nazwy KATALOG + / + NAZWA_PLIKU
+* Tworzenie jednej polaczonej nazwy KATALOG + / + NAZWA_PLIKU
 */
 
 void combinePath(char* combined, const char* katalog, const char* nazwa)

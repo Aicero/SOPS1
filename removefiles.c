@@ -1,64 +1,76 @@
 /*
-Wypisywanie listy plikow dostepnych w folderze podanym jako argument.
+* Wypisywanie listy plikow dostepnych w folderze podanym jako argument.
 */
 
-void removefiles(char *folderZrodlowy, char *folderDocelowy)
+void removefiles(const char *folderZrodlowy, const char *folderDocelowy)
 {
-	struct stat file1;
+	struct stat fileStruct;
 	DIR *dp;
 	struct dirent *ep;
 
 	dp = opendir(folderDocelowy);
 	if (dp == NULL)
 	{
-		loggererr("Nie mozna otworzyc katalogu.", errno);
+		loggerparamerr("Nie mozna otworzyc katalogu docelowego.", folderDocelowy, errno);
+		return;
 	}
 
 	while (ep = readdir(dp)) {
 		if (!strcmp(ep->d_name, ".") || !strcmp(ep->d_name, ".."))
-		{
+		{	/* Katalogi specjalne: . , .. zostana pominiete */
 			continue;
-			//Katalogi specjalne, nie powinno nic robic.
+		}
+		
+		/* Tworzenie sciezki bezposredniej do pliku/folderu */
+		char FileZrodlowyPath[PATH_MAX + 1];
+		char FileDocelowyPath[PATH_MAX + 1];
+		combinePath(FileZrodlowyPath, folderZrodlowy, ep->d_name);
+		combinePath(FileDocelowyPath, folderDocelowy, ep->d_name);
+		
+		if (stat(FileDocelowyPath, &fileStruct) < 0)
+		{
+			loggerparamerr("Nieudana proba otwarcia pliku w folderze docelowym!", ep->d_name, errno);
+			continue;
+		}
+		
+		/* Sprawdzenie czy sciezka prowadzi do folderu, oraz czy rekurencja == True */
+		if (S_ISDIR(fileStruct.st_mode) && !g_rekurencyjne)
+		{	/* Foldery przy wyłączonej rekurencji są pomijane */
+			continue;
+		}
+		else if (S_ISDIR(fileStruct.st_mode))
+		{	/* Jezeli folder nie istnieje w katalogu zrodlowym: usuwanie folderu wraz z zawartoscia */
+			if (stat(FileZrodlowyPath, &fileStruct) == -1)
+			{
+				int rmverr = rmrf(FileDocelowyPath);
+				if (rmverr != 0)
+				{
+					loggerparamerr("Blad usuwania elementu z folderu docelowego.", FileDocelowyPath, rmverr);
+				}
+			}
+			continue;
+		}
+		
+		/* Sprawdzenie czy sciezka prowadzi do pliku */
+		else if (S_ISREG(fileStruct.st_mode))
+		{	/* Jezeli plik nie istnieje w katalogu zrodlowym: usuwanie pliku */
+			if (access(FileZrodlowyPath, F_OK) == -1)
+			{
+				int rmverr = remove(FileDocelowyPath);
+				if (rmverr != 0) 
+				{
+					loggerparamerr("Blad usuwania pliku z folderu docelowego.", FileDocelowyPath, rmverr);
+				}
+				else 
+				{
+					loggerparamerr("Usunieto plik nieobecny w folderze zrodlowym.", FileDocelowyPath, 0);
+				}
+				continue;
+			}
 		}
 		else
 		{
-			if (ep->d_type == DT_LNK || ep->d_type == DT_UNKNOWN) {
-				//Trzeba dodac tu inne typy
-				continue;
-			}
-			char FileZrodlowyPath[PATH_MAX + 1];
-			char FileDocelowyPath[PATH_MAX + 1];
-			combinePath(FileZrodlowyPath, folderZrodlowy, ep->d_name);
-			combinePath(FileDocelowyPath, folderDocelowy, ep->d_name);
-			if (ep->d_type == DT_DIR && g_rekurencyjne)
-			{
-				if (stat(FileZrodlowyPath, &file1) == -1)
-				{
-					int rmverr = rmrf(FileDocelowyPath);
-					if (rmverr != 0) {
-						loggerparamerr("Blad usuwania elementu z folderu docelowego.", FileDocelowyPath, rmverr);
-					}
-				}
-				continue;
-			}
-			else if (ep->d_type == DT_REG)
-			{
-				if (access(FileZrodlowyPath, F_OK) == -1)
-				{
-					int rmverr = remove(FileDocelowyPath);
-					if (rmverr != 0) {
-						loggerparamerr("Blad usuwania pliku z folderu docelowego.", FileDocelowyPath, rmverr);
-					}
-					else {
-						loggerparamerr("Usunieto element nieobecny w folderze zrodlowym.", FileDocelowyPath, 0);
-					}
-					continue;
-				}
-			}
-			else
-			{
-				loggererr("Natrafiono na inny typ pliku podczas sprawdzania folderu DOCELOWEGO.", 0);
-			}
+			loggererr("Natrafiono na nieobslugiwany typ pliku podczas sprawdzania folderu DOCELOWEGO.", 0);
 		}
 	}
 	(void)closedir(dp);

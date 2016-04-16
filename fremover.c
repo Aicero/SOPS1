@@ -1,17 +1,16 @@
 /*
-Usuwanie folderów wraz z zawartością.
+* Usuwanie folderów wraz z zawartością.
 */
 #include <ftw.h>
-#define FTW_DEPTH 8
-#define FTW_PHYS 2
 
-int unlinkthis(char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf)
+int unlinkthis(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf)
 {
+	char* message;
 	int rv = remove(fpath);
 	if (rv) {
 		return rv;
 	}
-	loggerparamerr("Usunieto element nieobecny w folderze zrodlowym.", fpath, 0);
+	loggerparamerr((tflag == FTW_DP) ? "Usunieto folder nieobecny w folderze zrodlowym." : (tflag == FTW_DNR) ? "Tego folderu nie mozna odczytac." : (tflag == FTW_F) ? "Usunieto plik nieobecny w folderze zrodlowym" : (tflag == FTW_SL) ? "Plik jest likiem symbolicznym.": "????"  , fpath, 0);
 	return 0;
 }
 
@@ -21,7 +20,7 @@ int rmrf(char *path)
 	flags |= FTW_DEPTH;
 	flags |= FTW_PHYS;
 
-	if (nftw(path, unlinkthis, 20, flags) == -1) {
+	if (nftw(path, unlinkthis, 64, flags) == -1) {
 		perror("nftw");
 	}
 	return 0;

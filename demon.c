@@ -1,26 +1,5 @@
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <stdio.h>
-#include <signal.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <unistd.h>
-#include <syslog.h>
-#include <string.h>
-#include <dirent.h>
-#include <time.h>
-#include <libgen.h>
-#include <limits.h>
-#include "globals.c"
-#include "listfiles.c"
-#include "logger.c"
-#include "signalhandler.c"
-#include "removefiles.c"
-#include "nrmcopy.c"
-#include "combinePath.c"
-#include "memcopy.c"
-#include "fremover.c"
+#define _XOPEN_SOURCE 700
+#include "demon.h"
 
 
 int main(int argc, char * argv[]) {
@@ -34,12 +13,12 @@ int main(int argc, char * argv[]) {
 		exit(EXIT_FAILURE);
 	}
 
-	/* przypisanie adresow katalogu docelowego i zrodlowego */
+	/* Przypisanie bezposrednich adresow katalogu docelowego i zrodlowego do zmiennych globalnych*/
 	realpath(argv[1], g_pathZrodlowy);
 	realpath(argv[2], g_pathDocelowy);
 
 	if (g_pathZrodlowy == NULL || g_pathDocelowy == NULL) {
-		fprintf(stderr, "Blad rozwijania sciezki.");
+		perror("Blad rozwijania sciezki.");
 		exit(EXIT_FAILURE);
 	}
 
@@ -47,7 +26,7 @@ int main(int argc, char * argv[]) {
 		int c;
 		opterr = 0;
 
-		/* drukropek oznacza wymagana wartosc jezeli uzyje sie opcji np -t 102 -> ok -t -> nie ok */
+		/* Dwukropek oznacza wymagana wartosc, np -t 102 -> ok -t -> nie ok */
 		while ((c = getopt(argc, argv, "RrT:t:S:s:Vv")) != -1) {
 			switch (c)
 			{
@@ -58,22 +37,22 @@ int main(int argc, char * argv[]) {
 			case 'T':
 			case 't':
 				if (sscanf(optarg, "%i", &g_refreshTime) != 1) {
-					fprintf(stderr, "--Podano bledny czas spania.\nUzycie: -t \"czas w sekundach\"\n");
+					fprintf(stderr, "-- Podano bledny czas spania.\n-- Uzycie: -t \"czas w sekundach\"\n");
 					exit(EXIT_FAILURE);
 				}
 				if (g_refreshTime < 0) {
-					fprintf(stderr, "--Czas spania powinien miec wartosc dodatnia.\nUzycie: -t \"prog w bajtach\"\n");
+					fprintf(stderr, "-- Czas spania powinien miec wartosc dodatnia.\n-- Uzycie: -t \"czas w sekundach\"\n");
 					exit(EXIT_FAILURE);
 				}
 				break;
 			case 'S':
 			case 's':
 				if (sscanf(optarg, "%i", &g_progPodzialu) != 1) {
-					fprintf(stderr, "--Podano bledny prog.\nUzycie: -s \"prog w bajtach\"\n");
+					fprintf(stderr, "-- Podano bledny prog.\n-- Uzycie: -s \"prog w bajtach\"\n");
 					exit(EXIT_FAILURE);
 				}
 				if (g_progPodzialu < 0) {
-					fprintf(stderr, "--Prog powinien miec wartosc dodatnia.\nUzycie: -s \"prog w bajtach\"\n");
+					fprintf(stderr, "-- Prog powinien miec wartosc dodatnia.\n-- Uzycie: -s \"prog w bajtach\"\n");
 					exit(EXIT_FAILURE);
 				}
 				break;
@@ -101,15 +80,15 @@ int main(int argc, char * argv[]) {
 		signal(SIGTERM, signalhandler);
 		signal(SIGUSR1, signalhandler);
 
-		/* Our process ID and Session ID */
+		/* Tworzenie pid sid */
 		pid_t pid, sid;
 
-		/* Fork off the parent process */
+		/* Forkowanie glownego procesu */
 		pid = fork();
 		if (pid < 0) {
 			exit(EXIT_FAILURE);
 		}
-		/* If we got a good PID, then we can exit the parent process. */
+		/* Jezeli dostaniemy odpowiednie pid, zamykamy glowny proces */
 		if (pid > 0) {
 			exit(EXIT_SUCCESS);
 		}
@@ -128,7 +107,7 @@ int main(int argc, char * argv[]) {
 			exit(EXIT_FAILURE);
 		}
 
-		/* Close out the standard file descriptors */
+		/* Zamykanie standardowych desryptorow plikow */
 		close(STDIN_FILENO);
 		if (!g_verbose) close(STDOUT_FILENO);
 		if (!g_verbose) close(STDERR_FILENO);
@@ -137,7 +116,7 @@ int main(int argc, char * argv[]) {
 		while (1) {
 			if (!opendir(g_pathZrodlowy) || !opendir(g_pathDocelowy))
 			{
-				loggererr("Otwarcie folderu zrodlowego lub docelowego nie powiod³o sie. Demon umarl.", errno);
+				loggererr("Otwarcie folderu zrodlowego lub docelowego nie powiodï¿½o sie. Demon umarl.", errno);
 				exit(EXIT_FAILURE);
 			}
 			if (g_flagaSignal == 0) {

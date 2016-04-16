@@ -26,3 +26,7 @@ Komendy, pomocne przy testowaniu:
  - 'make prep' - stworzenie folderów docelowego i źródłowego wraz z plikami
  - 'make test', 'make testrek', 'make testverb': uruchomienie demona na folderach stworzonych komendą 'make prep'
  - 'make clean' - usunięcie folderów
+ - 'make cleanprop' - użycie komend 'make clean' 'make prop'
+ - 'make ls' - użycie ls -l -a na folderach testowych
+ - 'make sig' - wybudzenie demona przy pomocy sygnału SIGUSR1
+ - 'make kill' - zabicie procesu demona
