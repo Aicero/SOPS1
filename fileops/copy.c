@@ -10,23 +10,20 @@ int nrmcopy(const char* pathDocelowy, const char* pathZrodlowy, time_t czasZrodl
 
 	/* Tworzenie deskryptorow */
 	iZrodlowy = open(pathZrodlowy, O_RDONLY);
-	if (iZrodlowy == -1)
-	{
+	if (iZrodlowy == -1) {
 		return errno;
 	}
 
 	/* Tworzenie deskryptorow */
 	iDocelowy = open(pathDocelowy, O_WRONLY | O_TRUNC | O_CREAT, 777);
-	if (iDocelowy == -1)
-	{
+	if (iDocelowy == -1) {
 		return errno;
 	}
 
 	/* Kopiowanie */
 	while ((inputBytes = read(iZrodlowy, &buffer, BUF_SIZE)) > 0) {
 		outputBytes = write(iDocelowy, &buffer, (ssize_t)inputBytes);
-		if (outputBytes != inputBytes)
-		{
+		if (outputBytes != inputBytes) {
 			return -1;
 		}
 	}
@@ -38,8 +35,7 @@ int nrmcopy(const char* pathDocelowy, const char* pathZrodlowy, time_t czasZrodl
 	/* Ustawianie czasu modyfikacji */
 	struct utimbuf nowy_czas;
 	nowy_czas.modtime = czasZrodlowy;
-	if (utime(pathDocelowy, &nowy_czas) < 0)
-	{
+	if (utime(pathDocelowy, &nowy_czas) < 0) {
 		return errno;
 	}
 
@@ -62,19 +58,18 @@ int memcopy(const char* pathDocelowy, const char* pathZrodlowy, time_t czasZrodl
 	if (stat(pathZrodlowy, &s) != 0) {
 		return errno;
 	}
+	
 	filesize = s.st_size;
 
 	/* Tworzenie deskryptorow */
 	iZrodlowy = open(pathZrodlowy, O_RDONLY);
-	if (iZrodlowy == -1)
-	{
+	if (iZrodlowy == -1) {
 		return errno;
 	}
 
 	/* Tworzenie deskryptorow */
 	iDocelowy = open(pathDocelowy, O_WRONLY | O_TRUNC | O_CREAT, 777);
-	if (iDocelowy == -1)
-	{
+	if (iDocelowy == -1) {
 		return errno;
 	}
 
@@ -94,8 +89,7 @@ int memcopy(const char* pathDocelowy, const char* pathZrodlowy, time_t czasZrodl
 	/* Ustawianie czasu modyfikacji */
 	struct utimbuf nowy_czas;
 	nowy_czas.modtime = czasZrodlowy;
-	if (utime(pathDocelowy, &nowy_czas) < 0)
-	{
+	if (utime(pathDocelowy, &nowy_czas) < 0) {
 		return errno;
 	}
 

@@ -21,15 +21,18 @@ int main(int argc, char * argv[]) {
 		perror("Blad rozwijania sciezki.");
 		exit(EXIT_FAILURE);
 	}
-
+	
 	if (g_pathZrodlowy && g_pathDocelowy) {
 		int c;
 		opterr = 0;
 
 		/* Dwukropek oznacza wymagana wartosc, np -t 102 -> ok -t -> nie ok */
 		while ((c = getopt(argc, argv, "RrT:t:S:s:Vv")) != -1) {
-			switch (c)
-			{
+			switch (c) {
+			case 'V':
+			case 'v':
+				flags |= VERBOSE;
+				break;
 			case 'R':
 			case 'r':
 				flags |= RECURRENCY;
@@ -40,6 +43,7 @@ int main(int argc, char * argv[]) {
 					fprintf(stderr, "-- Podano bledny czas spania.\n-- Uzycie: -t \"czas w sekundach\"\n");
 					exit(EXIT_FAILURE);
 				}
+				
 				if (g_refreshTime < 0) {
 					fprintf(stderr, "-- Czas spania powinien miec wartosc dodatnia.\n-- Uzycie: -t \"czas w sekundach\"\n");
 					exit(EXIT_FAILURE);
@@ -51,14 +55,11 @@ int main(int argc, char * argv[]) {
 					fprintf(stderr, "-- Podano bledny prog.\n-- Uzycie: -s \"prog w bajtach\"\n");
 					exit(EXIT_FAILURE);
 				}
+				
 				if (g_progPodzialu < 0) {
 					fprintf(stderr, "-- Prog powinien miec wartosc dodatnia.\n-- Uzycie: -s \"prog w bajtach\"\n");
 					exit(EXIT_FAILURE);
 				}
-				break;
-			case 'V':
-			case 'v':
-				flags |= VERBOSE;
 				break;
 			case '?':
 				if (optopt == 'T' || optopt == 't' || optopt == 'S' || optopt == 's') {
@@ -70,6 +71,7 @@ int main(int argc, char * argv[]) {
 				else {
 					fprintf(stderr, "  Nieznany znak opcji `\\x%x'.\n", optopt);
 				}
+				
 				exit(EXIT_FAILURE);
 				break;
 			default:
@@ -90,15 +92,12 @@ int main(int argc, char * argv[]) {
 			exit(EXIT_SUCCESS);
 		}
 
-		/* Change the file mode mask */
-		umask(0);
-
-		/* Open any logs here */
+		/* Otwieranie logow */
 		setlogmask(LOG_UPTO(LOG_INFO));
 		openlog("SOPS1-demon", LOG_CONS | LOG_PID | LOG_NDELAY, LOG_LOCAL1);
 		logerr("Demon zostal uruchomiony pomyslnie.", 0);
 
-		/* Create a new SID for the child process */
+		/* Tworzenie nowego SID */
 		sid = setsid();
 		if (sid < 0) {
 			exit(EXIT_FAILURE);
@@ -111,40 +110,47 @@ int main(int argc, char * argv[]) {
 
 		/* The Big Loop */
 		while (1) {
+			/* Zmiana maski na 0000 */
+			umask(0);
+			/* Przypisanie handlerow sygnalow */
 			signal(SIGTERM, signalhandler);
 			signal(SIGUSR1, sigusrhandler);
 
-			if (!opendir(g_pathZrodlowy) || !opendir(g_pathDocelowy))
-			{
+			if (!opendir(g_pathZrodlowy) || !opendir(g_pathDocelowy)) {
 				logerr("Otwarcie folderu zrodlowego lub docelowego nie powiodlo sie. Demon umarl.", errno);
 				exit(EXIT_FAILURE);
 			}
 
-			if (flags & SYNCHRONIZATION)
-			{
+			if (flags & SYNCHRONIZATION) {
+				/* Wywolywane jezeli demon jest w trakcie synchronizacji plikow */
 				continue;
 			}
 
-			if (!(flags & FLAG_SIGNAL))
-			{
+			if (!(flags & FLAG_SIGNAL)) {
 				logerr("Demon wybudzony automatycznie.", 0);
-				flags |= SYNCHRONIZATION; // ustawienie flagi SYNCHRONIZATION
+				/* Ustawienie flagi SYNCHRONIZATION */
+				flags |= SYNCHRONIZATION; 
+				/* Rozpoczecie dzialania na folderach */
 				lsfiles(g_pathZrodlowy, g_pathDocelowy);
 				rmfiles(g_pathZrodlowy, g_pathDocelowy);
-				flags &= ~SYNCHRONIZATION; // wylaczenie flagi SYNCHRONIZATION
-			}
-
-			else
-			{
+				/* Wylaczenie flagi SYNCHRONIZATION */
+				flags &= ~SYNCHRONIZATION;
+			} 
+			else {
 				logerr("Demon wybudzony przez SIGUSR1.", 0);
+				/* Ustawienie flagi SYNCHRONIZATION */
 				flags |= SYNCHRONIZATION; // ustawienie flagi SYNCHRONIZATION
+				/* Rozpoczecie dzialania na folderach */
 				lsfiles(g_pathZrodlowy, g_pathDocelowy);
 				rmfiles(g_pathZrodlowy, g_pathDocelowy);
-				flags &= ~SYNCHRONIZATION; // wylaczenie flagi SYNCHRONIZATION
-				flags &= ~FLAG_SIGNAL; // wylaczenie flagi FLAG_SIGNAL
+				/* Wylaczenie flagi SYNCHRONIZATION */
+				flags &= ~SYNCHRONIZATION;
+				/* Wylaczenie flagi FLAG_SIGNAL */				
+				flags &= ~FLAG_SIGNAL;
 			}
 
 			logerr("Demon zostal uspiony.", 0);
+			/* Uspienie na okreslony czas */
 			sleep(g_refreshTime);
 		}
 		exit(EXIT_SUCCESS);
