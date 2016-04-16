@@ -119,25 +119,25 @@ int main(int argc, char * argv[]) {
 				logerr("Otwarcie folderu zrodlowego lub docelowego nie powiodlo sie. Demon umarl.", errno);
 				exit(EXIT_FAILURE);
 			}
-			if (g_flagaSignal == 0) {
+			if (g_flagSignal == 0) {
 				logerr("Demon wybudzony automatycznie.", 0);
 				g_duringSynchronization = 1;
-				listfiles(g_pathZrodlowy, g_pathDocelowy);
-				removefiles(g_pathZrodlowy, g_pathDocelowy);
+				lsfiles(g_pathZrodlowy, g_pathDocelowy);
+				rmfiles(g_pathZrodlowy, g_pathDocelowy);
 				g_duringSynchronization = 0;
 			}
 			else {
 				if (g_duringSynchronization == 1) {
-					g_flagaSignal = 0;
+					g_flagSignal = 0;
 					sleep(g_refreshTime);
 					continue;
 				}
 				logerr("Demon wybudzony przez SIGUSR1.", 0);
 				g_duringSynchronization = 1;
-				listfiles(g_pathZrodlowy, g_pathDocelowy);
-				removefiles(g_pathZrodlowy, g_pathDocelowy);
+				lsfiles(g_pathZrodlowy, g_pathDocelowy);
+				rmfiles(g_pathZrodlowy, g_pathDocelowy);
 				g_duringSynchronization = 0;
-				g_flagaSignal = 0;
+				g_flagSignal = 0;
 			}
 			logerr("Demon zostal uspiony.", 0);
 			sleep(g_refreshTime);

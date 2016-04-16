@@ -2,7 +2,7 @@
 * Wypisywanie listy plikow dostepnych w folderze podanym jako argument.
 */
 
-void removefiles(const char *folderZrodlowy, const char *folderDocelowy)
+void rmfiles(const char *folderZrodlowy, const char *folderDocelowy)
 {
 	struct stat _FileStruct;
 	DIR *dp;

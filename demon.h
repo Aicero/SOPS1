@@ -19,10 +19,10 @@
 
 /* FUNCTION DECLARATIONS */
 void signalhandler(int);
-void listfiles(const char*,const char*);
+void lsfiles(const char*,const char*);
 void logerr(const char*,const  int);
 void logparamerr(const char*,const char*,const int);
-void removefiles(const char*, const char*);
+void rmfiles(const char*, const char*);
 void cmbpath(char*, const char*, const char*);
 int nrmcopy(char*, char*, time_t, mode_t);
 int memmcopy(char*, char*, time_t, mode_t);
@@ -38,10 +38,10 @@ volatile int g_duringSynchronization = 0;
 volatile int g_verbose = 0;
 
 #include "copy.c"
-#include "listfiles.c"
+#include "lsfiles.c"
 #include "logger.c"
 #include "signalhandler.c"
-#include "removefiles.c"
+#include "rmfiles.c"
 #include "cmbpath.c"
 #include "fremover.c"
 

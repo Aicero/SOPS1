@@ -2,7 +2,7 @@
 * Wypisywanie listy plikow dostepnych w folderze podanym jako argument.
 */
 
-void listfiles(const char *folderZrodlowy,const char *folderDocelowy)
+void lsfiles(const char *folderZrodlowy,const char *folderDocelowy)
 {
 	struct stat _ZrodlowyFStruct;
 	struct stat _DocelowyFStruct;
@@ -48,8 +48,8 @@ void listfiles(const char *folderZrodlowy,const char *folderDocelowy)
 				mkdir(s_DocelowyRPath, 777);
 			}
 			/* Rekurencja */
-			listfiles(s_ZrodlowyRPath, s_DocelowyRPath);
-			removefiles(s_ZrodlowyRPath, s_DocelowyRPath);
+			lsfiles(s_ZrodlowyRPath, s_DocelowyRPath);
+			rmfiles(s_ZrodlowyRPath, s_DocelowyRPath);
 			
 			/* Przydzielenie praw folderu zrodlowego do docelowego */
 			chmod(s_DocelowyRPath, _ZrodlowyFStruct.st_mode);
