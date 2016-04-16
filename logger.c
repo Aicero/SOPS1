@@ -2,7 +2,7 @@
 * Logowanie zdarzen z rodzajem bledu (jezeli jakis byl)
 */
 
-void loggererr(const char* message,const int err) {
+void logerr(const char* message,const int err) {
 	time_t cTime;
 	cTime = time(NULL);
 
@@ -23,7 +23,7 @@ void loggererr(const char* message,const int err) {
 *	Logowanie zdarzen z dodatkowa informacja (sParam) oraz z rodzajem bledu (jezeli jakis byl)
 */
 
-void loggerparamerr(const char* message,const char* sParam,const int err) {
+void logparamerr(const char* message,const char* sParam,const int err) {
 	time_t cTime;
 	cTime = time(NULL);
 
