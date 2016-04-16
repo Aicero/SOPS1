@@ -31,7 +31,7 @@ void lsfiles(const char *folderZrodlowy,const char *folderDocelowy)
 
 		if (stat(s_ZrodlowyRPath, &_ZrodlowyFStruct) < 0)
 		{
-			logparamerr("Nieudana proba otwarcia pliku/folderu w folderze zrodlowym!", ep->d_name, errno);
+			logparamerr("Nieudana proba otwarcia pliku/folderu w folderze zrodlowym!", s_ZrodlowyRPath, errno);
 			continue;
 		}
 		
@@ -68,7 +68,7 @@ void lsfiles(const char *folderZrodlowy,const char *folderDocelowy)
 					int nrmerr = nrmcopy(s_DocelowyRPath, s_ZrodlowyRPath, time(NULL), _ZrodlowyFStruct.st_mode);
 					if (nrmerr != 0) 
 					{
-						logparamerr("[read/write] Utworzenie pliku w katalogu docelowym nie powiodlo sie.", s_DocelowyRPath, nrmerr);
+						logparamerr("[read/write] Utworzenie pliku w katalogu docelowym nie powiodlo sie.", s_ZrodlowyRPath, nrmerr);
 					}
 					else
 					{
@@ -80,7 +80,7 @@ void lsfiles(const char *folderZrodlowy,const char *folderDocelowy)
 					int memerr = memcopy(s_DocelowyRPath, s_ZrodlowyRPath, time(NULL), _ZrodlowyFStruct.st_mode);
 					if (memerr != 0) 
 					{
-						logparamerr("[mmap/write] Utworzenie pliku w katalogu docelowym nie powiodlo sie.", s_DocelowyRPath, memerr);
+						logparamerr("[mmap/write] Utworzenie pliku w katalogu docelowym nie powiodlo sie.", s_ZrodlowyRPath, memerr);
 					}
 					else
 					{
@@ -101,7 +101,7 @@ void lsfiles(const char *folderZrodlowy,const char *folderDocelowy)
 						int nrmerr = nrmcopy(s_DocelowyRPath, s_ZrodlowyRPath, Czas1, mode);
 						if (nrmerr != 0) 
 						{
-							logparamerr("[read/write] Blad kopiowania pliku do katalogu docelowego.", s_DocelowyRPath, nrmerr);
+							logparamerr("[read/write] Blad kopiowania pliku do katalogu docelowego.", s_ZrodlowyRPath, nrmerr);
 						}
 						else
 						{
@@ -112,7 +112,7 @@ void lsfiles(const char *folderZrodlowy,const char *folderDocelowy)
 						int memerr = memcopy(s_DocelowyRPath, s_ZrodlowyRPath, Czas1, mode);
 						if (memerr != 0) 
 						{
-							logparamerr("[mmap/write] Blad kopiowania pliku do katalogu docelowego.", s_DocelowyRPath, memerr);
+							logparamerr("[mmap/write] Blad kopiowania pliku do katalogu docelowego.", s_ZrodlowyRPath, memerr);
 						}
 						else
 						{
