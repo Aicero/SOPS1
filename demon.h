@@ -17,6 +17,7 @@
 #include <limits.h>
 #include <utime.h>
 
+/* FUNCTION DECLARATIONS */
 void signalhandler(int);
 void listfiles(const char*,const char*);
 void loggererr(const char*,const  int);
@@ -26,7 +27,16 @@ void combinePath(char*, const char*, const char*);
 int nrmcopy(char*, char*, time_t, mode_t);
 int memmcopy(char*, char*, time_t, mode_t);
 
-#include "globals.c"
+/* DEMON FLAGS & GLOBAL VALUES */
+char g_pathZrodlowy[PATH_MAX + 1];
+char g_pathDocelowy[PATH_MAX + 1];
+int g_rekurencyjne = 0;
+int g_refreshTime = 300; // 300 = 5min * 60sec
+int g_progPodzialu = 0;
+volatile int g_flagaSignal = 0;
+volatile int g_duringSynchronization = 0;
+volatile int g_verbose = 0;
+
 #include "copy.c"
 #include "listfiles.c"
 #include "logger.c"
