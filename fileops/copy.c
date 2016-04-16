@@ -64,8 +64,21 @@ int memcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 		return errno;
 	}
 	filesize = s.st_size;
+	
+	/* Tworzenie deskryptorow */
 	iZrodlowy = open(pathZrodlowy, O_RDONLY);
-	iDocelowy = open(pathDocelowy, O_RDWR | O_CREAT, 777);
+	if (iZrodlowy == -1)
+	{
+		return errno;
+	}
+
+	/* Tworzenie deskryptorow */
+	iDocelowy = open(pathDocelowy, O_WRONLY | O_TRUNC | O_CREAT, 777);
+	if (iDocelowy == -1)
+	{
+		return errno;
+	}
+	
 	ftruncate(iDocelowy, filesize);
 
 	source = mmap(NULL, filesize, PROT_READ, MAP_PRIVATE, iZrodlowy, 0);
