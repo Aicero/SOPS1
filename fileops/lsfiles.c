@@ -36,7 +36,7 @@ void lsfiles(const char *folderZrodlowy,const char *folderDocelowy)
 		}
 		
 		/* Sprawdzenie czy sciezka prowadzi do folderu, oraz czy rekurencja == True */
-		if (S_ISDIR(_ZrodlowyFStruct.st_mode) && !g_rekurencyjne)
+		if (S_ISDIR(_ZrodlowyFStruct.st_mode) && !(flags & RECURRENCY))
 		{	/* Foldery przy wyłączonej rekurencji są pomijane */
 			continue;
 		}

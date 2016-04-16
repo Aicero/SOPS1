@@ -32,7 +32,7 @@ int main(int argc, char * argv[]) {
 			{
 			case 'R':
 			case 'r':
-				g_rekurencyjne = 1;
+				flags |= RECURRENCY;
 				break;
 			case 'T':
 			case 't':
@@ -58,7 +58,7 @@ int main(int argc, char * argv[]) {
 				break;
 			case 'V':
 			case 'v':
-				g_verbose = 1;
+				flags |= VERBOSE;
 				break;
 			case '?':
 				if (optopt == 'T' || optopt == 't' || optopt == 'S' || optopt == 's') {
@@ -109,9 +109,9 @@ int main(int argc, char * argv[]) {
 
 		/* Zamykanie standardowych desryptorow plikow */
 		close(STDIN_FILENO);
-		if (!g_verbose) close(STDOUT_FILENO);
-		if (!g_verbose) close(STDERR_FILENO);
-
+		if (!(flags & VERBOSE)) close(STDOUT_FILENO);
+		if (!(flags & VERBOSE)) close(STDERR_FILENO);
+		
 		/* The Big Loop */
 		while (1) {
 			if (!opendir(g_pathZrodlowy) || !opendir(g_pathDocelowy))
@@ -119,25 +119,25 @@ int main(int argc, char * argv[]) {
 				logerr("Otwarcie folderu zrodlowego lub docelowego nie powiodlo sie. Demon umarl.", errno);
 				exit(EXIT_FAILURE);
 			}
-			if (g_flagSignal == 0) {
+			if (!(flags & FLAG_SIGNAL)) {
 				logerr("Demon wybudzony automatycznie.", 0);
-				g_duringSynchronization = 1;
+				flags |= SYNCHRONIZATION; // ustawienie flagi SYNCHRONIZATION
 				lsfiles(g_pathZrodlowy, g_pathDocelowy);
 				rmfiles(g_pathZrodlowy, g_pathDocelowy);
-				g_duringSynchronization = 0;
+				flags &= ~SYNCHRONIZATION; // wylaczenie flagi SYNCHRONIZATION
 			}
 			else {
-				if (g_duringSynchronization == 1) {
-					g_flagSignal = 0;
+				if (flags & SYNCHRONIZATION) {
+					flags &= ~FLAG_SIGNAL; // wylaczenie flagi FLAG_SIGNAL
 					sleep(g_refreshTime);
 					continue;
 				}
 				logerr("Demon wybudzony przez SIGUSR1.", 0);
-				g_duringSynchronization = 1;
+				flags |= SYNCHRONIZATION; // ustawienie flagi SYNCHRONIZATION
 				lsfiles(g_pathZrodlowy, g_pathDocelowy);
 				rmfiles(g_pathZrodlowy, g_pathDocelowy);
-				g_duringSynchronization = 0;
-				g_flagSignal = 0;
+				flags &= ~SYNCHRONIZATION; // wylaczenie flagi SYNCHRONIZATION
+				flags &= ~FLAG_SIGNAL; // wylaczenie flagi FLAG_SIGNAL
 			}
 			logerr("Demon zostal uspiony.", 0);
 			sleep(g_refreshTime);
