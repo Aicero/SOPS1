@@ -1,10 +1,12 @@
 void signalhandler(int signum) {
-	if (signum == SIGTERM) {
+	if (signum == SIGTERM && !(flags & FLAG_SIGNAL)) {
 		closelog();
 		logerr("Zakonczono dzialanie demona. [kill]", 0);
 		exit(signum);
 	}
-	else if (signum == SIGUSR1) {
-		g_flagSignal = 1;
-	}
+}
+
+void sigusrhandler(int signum){
+	flags |= FLAG_SIGNAL;
+	perror("error");
 }
