@@ -45,7 +45,7 @@ void lsfiles(const char *folderZrodlowy,const char *folderDocelowy)
 			if (stat(s_DocelowyRPath, &_DocelowyFStruct) == -1)
 			{	/* Tworzenie folderu */
 				logparamerr("Rozpoczeto kopiowanie folderu.", s_DocelowyRPath, 0);
-				mkdir(s_DocelowyRPath, 777);
+				mkdir(s_DocelowyRPath, _ZrodlowyFStruct.st_mode);
 			}
 			/* Rekurencja */
 			lsfiles(s_ZrodlowyRPath, s_DocelowyRPath);
