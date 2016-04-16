@@ -5,6 +5,6 @@ void signalhandler(int signum) {
 		exit(signum);
 	}
 	else if (signum == SIGUSR1) {
-		g_flagaSignal = 1;
+		g_flagSignal = 1;
 	}
 }
