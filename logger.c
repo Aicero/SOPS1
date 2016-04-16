@@ -11,11 +11,11 @@ void logerr(const char* message,const int err) {
 
 	if (err != 0) {
 		syslog(LOG_INFO, "%s error: %s", message, strerror(err));
-		if (flags & VERBOSE) fprintf(stderr, "%s %s\n\terror: %s\n", currentTime, message, strerror(err));
+		if (flags & VERBOSE) fprintf(stderr, "%s %s\n error: %s\n", message, currentTime, strerror(err));
 	}
 	else {
 		syslog(LOG_INFO, "%s", message);
-		if (flags & VERBOSE) fprintf(stderr, "%s %s\n", currentTime, message);
+		if (flags & VERBOSE) fprintf(stderr, "%s %s\n", message, currentTime);
 	}
 }
 
@@ -32,10 +32,10 @@ void logparamerr(const char* message,const char* sParam,const int err) {
 
 	if (err != 0) {
 		syslog(LOG_INFO, "%s (%s) error: %s", message, sParam, strerror(err));
-		if (flags & VERBOSE) fprintf(stderr, "%s %s\n\tParametr: %s\n\t error: %s\n", currentTime, message, sParam, strerror(err));
+		if (flags & VERBOSE) fprintf(stderr, "%s %s\n\tParametr: %s\n\t error: %s\n", sParam, message, currentTime, strerror(err));
 	}
 	else {
 		syslog(LOG_INFO, "%s (%s)", message, sParam);
-		if (flags & VERBOSE) fprintf(stderr, "%s %s\n\tParametr: %s\n", currentTime, message, sParam);
+		if (flags & VERBOSE) fprintf(stderr, "%s %s\n Parametr: %s\n", message, currentTime, sParam);
 	}
 }

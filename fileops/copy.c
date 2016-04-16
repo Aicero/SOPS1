@@ -2,7 +2,7 @@
 * Kopiowanie plikow uzywajac read/write
 */
 
-int nrmcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t modeZrodlowy)
+int nrmcopy(const char* pathDocelowy,const char* pathZrodlowy, time_t czasZrodlowy, mode_t modeZrodlowy)
 {
 	remove(pathDocelowy);
 	int iZrodlowy, iDocelowy;
@@ -52,7 +52,7 @@ int nrmcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 /*
 * Kopiowanie plikow uzywajac mmap/write
 */
-int memcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t modeZrodlowy)
+int memcopy(const char* pathDocelowy,const char* pathZrodlowy, time_t czasZrodlowy, mode_t modeZrodlowy)
 {
 	int iZrodlowy, iDocelowy;
 	void* source;
