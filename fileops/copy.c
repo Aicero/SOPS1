@@ -4,7 +4,6 @@
 
 int nrmcopy(const char* pathDocelowy,const char* pathZrodlowy, time_t czasZrodlowy, mode_t modeZrodlowy)
 {
-	remove(pathDocelowy);
 	int iZrodlowy, iDocelowy;
 	ssize_t inputBytes, outputBytes;
 	char buffer[BUF_SIZE];      /* Char buffer */
