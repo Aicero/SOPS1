@@ -18,21 +18,21 @@
 /* FUNCTION DECLARATIONS */
 void signalhandler(int);
 void sigusrhandler(int);
-void logerr(const char*,const  int);
-void logparamerr(const char*,const char*,const int);
+void logerr(const char*, const  int);
+void logparamerr(const char*, const char*, const int);
 void cmbpath(char*, const char*, const char*);
 
 volatile int flags;
 
 enum {
-    FLAG_SIGNAL = 1 << 0,
-	#define FLAG_SIGNAL FLAG_SIGNAL
-    SYNCHRONIZATION = 1 << 1,
-	#define SYNCHRONIZATION SYNCHRONIZATION
+	FLAG_SIGNAL = 1 << 0,
+#define FLAG_SIGNAL FLAG_SIGNAL
+	SYNCHRONIZATION = 1 << 1,
+#define SYNCHRONIZATION SYNCHRONIZATION
 	VERBOSE = 1 << 2,
-	#define VERBOSE VERBOSE
+#define VERBOSE VERBOSE
 	RECURRENCY = 1 << 3
-	#define RECURRENCY RECURRENCY
+#define RECURRENCY RECURRENCY
 };
 
 /* DEMON FLAGS & GLOBAL VALUES */
