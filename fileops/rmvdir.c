@@ -18,7 +18,7 @@ int unlinkthis(const char *fpath, const struct stat *sb, int tflag, struct FTW *
 	return 0;
 }
 
-int rmrf(char *path)
+int rmvdir(char *path)
 {
 	int flags = 0;
 	flags |= FTW_DEPTH;

@@ -42,7 +42,7 @@ void rmfiles(const char *folderZrodlowy, const char *folderDocelowy)
 		{	/* Jezeli folder nie istnieje w katalogu zrodlowym: usuwanie folderu wraz z zawartoscia */
 			if (stat(s_ZrodlowyRPath, &_FileStruct) == -1)
 			{
-				int rmverr = rmrf(s_DocelowyRPath);
+				int rmverr = rmvdir(s_DocelowyRPath);
 				if (rmverr != 0)
 				{
 					logparamerr("Blad usuwania elementu z folderu docelowego.", s_DocelowyRPath, rmverr);

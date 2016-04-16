@@ -35,13 +35,13 @@ volatile int g_flagSignal = 0;
 volatile int g_duringSynchronization = 0;
 volatile int g_verbose = 0;
 
-#include "copy.c"
-#include "lsfiles.c"
+#include "fileops/copy.c"
+#include "fileops/lsfiles.c"
+#include "fileops/rmfiles.c"
+#include "fileops/rmvdir.c"
 #include "logger.c"
 #include "signalhandler.c"
-#include "rmfiles.c"
 #include "cmbpath.c"
-#include "fremover.c"
 
 
 #endif
