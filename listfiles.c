@@ -40,8 +40,7 @@ void listfiles(const char *folderZrodlowy,const char *folderDocelowy)
 		{	/* Foldery przy wyłączonej rekurencji są pomijane */
 			continue;
 		}
-		
-		if (S_ISDIR(zrodlowyFStruct.st_mode))
+		else if (S_ISDIR(zrodlowyFStruct.st_mode))
 		{	/* Jezeli folder nie istnieje w folderze docelowym - zostaje utworzony */
 			if (stat(FileDocelowyPath, &docelowyFStruct) == -1)
 			{	/* Tworzenie folderu */
