@@ -11,7 +11,7 @@ void removefiles(const char *folderZrodlowy, const char *folderDocelowy)
 	dp = opendir(folderDocelowy);
 	if (dp == NULL)
 	{
-		loggererr("Nie mozna otworzyc katalogu.", errno);
+		loggerparamerr("Nie mozna otworzyc katalogu docelowego.", folderDocelowy, errno);
 	}
 
 	while (ep = readdir(dp)) {
@@ -30,6 +30,9 @@ void removefiles(const char *folderZrodlowy, const char *folderDocelowy)
 			combinePath(FileZrodlowyPath, folderZrodlowy, ep->d_name);
 			combinePath(FileDocelowyPath, folderDocelowy, ep->d_name);
 			
+			char* bname;
+			bname = basename(FileDocelowyPath);
+			
 			/* Sprawdzenie czy sciezka prowadzi do folderu, oraz czy rekurencja == True */
 			if (ep->d_type == DT_DIR && g_rekurencyjne)
 			{
@@ -38,7 +41,7 @@ void removefiles(const char *folderZrodlowy, const char *folderDocelowy)
 				{
 					int rmverr = rmrf(FileDocelowyPath);
 					if (rmverr != 0) {
-						loggerparamerr("Blad usuwania elementu z folderu docelowego.", FileDocelowyPath, rmverr);
+						loggerparamerr("Blad usuwania elementu z folderu docelowego.", bname, rmverr);
 					}
 				}
 				continue;
@@ -52,10 +55,10 @@ void removefiles(const char *folderZrodlowy, const char *folderDocelowy)
 				{
 					int rmverr = remove(FileDocelowyPath);
 					if (rmverr != 0) {
-						loggerparamerr("Blad usuwania pliku z folderu docelowego.", FileDocelowyPath, rmverr);
+						loggerparamerr("Blad usuwania pliku z folderu docelowego.", bname, rmverr);
 					}
 					else {
-						loggerparamerr("Usunieto plik nieobecny w folderze zrodlowym.", FileDocelowyPath, 0);
+						loggerparamerr("Usunieto plik nieobecny w folderze zrodlowym.", bname, 0);
 					}
 					continue;
 				}

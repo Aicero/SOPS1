@@ -13,7 +13,7 @@ void listfiles(const char *folderZrodlowy,const char *folderDocelowy)
 	dp = opendir(folderZrodlowy);
 	if (dp == NULL)
 	{
-		loggererr("Blad otwierania katalogu!", errno);
+		loggerparamerr("Blad otwierania katalogu zrodlowego!", folderZrodlowy, errno);
 		return;
 	}
 
@@ -47,6 +47,7 @@ void listfiles(const char *folderZrodlowy,const char *folderDocelowy)
 				if (stat(FileDocelowyPath, &file1) == -1)
 				{
 					/* Tworzenie folderu */
+					loggerparamerr("Rozpoczeto kopiowanie folderu.", ep->d_name, 0);
 					mkdir(FileDocelowyPath, 777);
 				}
 				/* Rekurencja */
