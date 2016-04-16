@@ -17,6 +17,7 @@
 
 /* FUNCTION DECLARATIONS */
 void signalhandler(int);
+void sigusrhandler(int);
 void logerr(const char*,const  int);
 void logparamerr(const char*,const char*,const int);
 void cmbpath(char*, const char*, const char*);

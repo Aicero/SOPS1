@@ -77,9 +77,6 @@ int main(int argc, char * argv[]) {
 			}
 		}
 
-		signal(SIGTERM, signalhandler);
-		signal(SIGUSR1, signalhandler);
-
 		/* Tworzenie pid sid */
 		pid_t pid, sid;
 
@@ -114,6 +111,9 @@ int main(int argc, char * argv[]) {
 		
 		/* The Big Loop */
 		while (1) {
+			signal(SIGTERM, signalhandler);
+			signal(SIGUSR1, sigusrhandler);
+			
 			if (!opendir(g_pathZrodlowy) || !opendir(g_pathDocelowy))
 			{
 				logerr("Otwarcie folderu zrodlowego lub docelowego nie powiodlo sie. Demon umarl.", errno);
