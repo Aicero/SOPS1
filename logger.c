@@ -32,7 +32,7 @@ void logparamerr(const char* message,const char* sParam,const int err) {
 
 	if (err != 0) {
 		syslog(LOG_INFO, "%s (%s) error: %s", message, sParam, strerror(err));
-		if (flags & VERBOSE) fprintf(stderr, "%s %s\n\tParametr: %s\n\t error: %s\n", currentTime, message, strerror(err), sParam);
+		if (flags & VERBOSE) fprintf(stderr, "%s %s\n\tParametr: %s\n\t error: %s\n", currentTime, message, sParam, strerror(err));
 	}
 	else {
 		syslog(LOG_INFO, "%s (%s)", message, sParam);
