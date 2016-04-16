@@ -8,5 +8,4 @@ void signalhandler(int signum) {
 
 void sigusrhandler(int signum){
 	flags |= FLAG_SIGNAL;
-	perror("error");
 }
