@@ -19,18 +19,15 @@ void listfiles(const char *folderZrodlowy,const char *folderDocelowy)
 
 	while (ep = readdir(dp)) {
 
-		if (!strcmp(ep->d_name, ".") || !strcmp(ep->d_name, ".."))
+		if (!strcmp(ep->d_name, ".") || !strcmp(ep->d_name, "..") || (ep->d_type != DT_REG && ep->d_type != DT_DIR))
 		{
-			/*Katalogi specjalne: . oraz .. zostana pominiete*/
+			/*
+			* Katalogi specjalne: . , .. oraz nieobslugiwane rodzaje plikow zostana pominiete 
+			*/
 			continue;
 		}
 		else
-		{
-			if (ep->d_type == DT_LNK || ep->d_type == DT_UNKNOWN) {
-				/* Pomijanie linkow symbolicznych oraz plikow nieznanych */
-				continue;
-			}
-			
+		{	
 			/* Tworzenie sciezki bezposredniej do pliku/folderu */
 			char FileZrodlowyPath[PATH_MAX + 1];
 			char FileDocelowyPath[PATH_MAX + 1];
