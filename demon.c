@@ -120,8 +120,8 @@ int main(int argc, char * argv[]) {
 				exit(EXIT_FAILURE);
 			}
 			if (flags & SYNCHRONIZATION) {
-					continue;
-				}
+				continue;
+			}
 			if (!(flags & FLAG_SIGNAL)) {
 				logerr("Demon wybudzony automatycznie.", 0);
 				flags |= SYNCHRONIZATION; // ustawienie flagi SYNCHRONIZATION
