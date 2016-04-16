@@ -1,7 +1,6 @@
 /*
 * Usuwanie folderów wraz z zawartością.
 */
-#include <ftw.h>
 
 int unlinkthis(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf)
 {
