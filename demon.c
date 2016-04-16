@@ -79,15 +79,15 @@ int main(int argc, char * argv[]) {
 		signal(SIGTERM, signalhandler);
 		signal(SIGUSR1, signalhandler);
 
-		/* Our process ID and Session ID */
+		/* Tworzenie pid sid */
 		pid_t pid, sid;
 
-		/* Fork off the parent process */
+		/* Forkowanie glownego procesu */
 		pid = fork();
 		if (pid < 0) {
 			exit(EXIT_FAILURE);
 		}
-		/* If we got a good PID, then we can exit the parent process. */
+		/* Jezeli dostaniemy odpowiednie pid, zamykamy glowny proces */
 		if (pid > 0) {
 			exit(EXIT_SUCCESS);
 		}
@@ -106,7 +106,7 @@ int main(int argc, char * argv[]) {
 			exit(EXIT_FAILURE);
 		}
 
-		/* Close out the standard file descriptors */
+		/* Zamykanie standardowych desryptorow plikow */
 		close(STDIN_FILENO);
 		if (!g_verbose) close(STDOUT_FILENO);
 		if (!g_verbose) close(STDERR_FILENO);

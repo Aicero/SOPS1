@@ -1,5 +1,5 @@
 /*
-Kopiowanie plikow uzywajac read/write
+* Kopiowanie plikow uzywajac read/write
 */
 
 #include <sys/mman.h>
@@ -55,7 +55,7 @@ int nrmcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 
 
 /*
-Kopiowanie plikow uzywajac mmap
+* Kopiowanie plikow uzywajac mmap/write
 */
 int memcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t modeZrodlowy)
 {

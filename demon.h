@@ -19,8 +19,8 @@
 
 void signalhandler(int);
 void listfiles(const char*,const char*);
-void loggererr(char*, int);
-void loggerparamerr(char*, char*, int);
+void loggererr(const char*,const  int);
+void loggerparamerr(const char*,const char*,const int);
 void removefiles(const char*, const char*);
 void combinePath(char*, const char*, const char*);
 int nrmcopy(char*, char*, time_t, mode_t);

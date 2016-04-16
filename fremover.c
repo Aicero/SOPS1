@@ -1,5 +1,5 @@
 /*
-Usuwanie folderów wraz z zawartością.
+* Usuwanie folderów wraz z zawartością.
 */
 #include <ftw.h>
 #define FTW_DEPTH 8
@@ -11,7 +11,7 @@ int unlinkthis(char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf
 	if (rv) {
 		return rv;
 	}
-	loggerparamerr("Usunieto element nieobecny w folderze zrodlowym.", fpath, 0);
+	loggerparamerr("Usunieto folder nieobecny w folderze zrodlowym.", fpath, 0);
 	return 0;
 }
 

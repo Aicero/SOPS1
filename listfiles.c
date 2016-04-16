@@ -1,5 +1,5 @@
 /*
-Wypisywanie listy plikow dostepnych w folderze podanym jako argument.
+* Wypisywanie listy plikow dostepnych w folderze podanym jako argument.
 */
 
 void listfiles(const char *folderZrodlowy,const char *folderDocelowy)
@@ -21,16 +21,17 @@ void listfiles(const char *folderZrodlowy,const char *folderDocelowy)
 
 		if (!strcmp(ep->d_name, ".") || !strcmp(ep->d_name, ".."))
 		{
+			/*Katalogi specjalne: . oraz .. zostana pominiete*/
 			continue;
-			//Katalogi specjalne, nie powinno nic robic.
 		}
 		else
 		{
 			if (ep->d_type == DT_LNK || ep->d_type == DT_UNKNOWN) {
-				//Trzeba dodac tu inne typy
+				/* Pomijanie linkow symbolicznych oraz plikow nieznanych */
 				continue;
 			}
-
+			
+			/* Tworzenie sciezki bezposredniej do pliku/folderu */
 			char FileZrodlowyPath[PATH_MAX + 1];
 			char FileDocelowyPath[PATH_MAX + 1];
 			combinePath(FileZrodlowyPath, folderZrodlowy, ep->d_name);
@@ -41,22 +42,30 @@ void listfiles(const char *folderZrodlowy,const char *folderDocelowy)
 				loggerparamerr("Nieudana proba otwarcia pliku w folderze zrodlowym!", ep->d_name, errno);
 				continue;
 			}
-
+			
+			/* Sprawdzenie czy sciezka prowadzi do folderu, oraz czy rekurencja == True */
 			if (ep->d_type == DT_DIR && g_rekurencyjne)
 			{
+				/* Jezeli folder nie istnieje w folderze docelowym - zostaje utworzony */
 				if (stat(FileDocelowyPath, &file1) == -1)
 				{
+					/* Tworzenie folderu */
 					mkdir(FileDocelowyPath, 777);
 				}
+				/* Rekurencja */
 				listfiles(FileZrodlowyPath, FileDocelowyPath);
 				removefiles(FileZrodlowyPath, FileDocelowyPath);
+				
+				/* Przydzielenie praw folderu zrodlowego do docelowego */
 				chmod(FileDocelowyPath, file1.st_mode);
 				continue;
 			}
+			
+			/* Sprawdzenie czy sciezka prowadzi do pliku */
 			else if (ep->d_type == DT_REG)
 			{
 				time_t Czas1 = file1.st_mtime;
-
+				/* Sprawdzanie czy plik istenieje w katalogu docelowym: jezeli nie -> kopiujemy plik z folderu zrodlowego */
 				if (stat(FileDocelowyPath, &file2) < 0)
 				{
 					if (g_progPodzialu == 0 || file1.st_size < (size_t)g_progPodzialu) {
@@ -73,9 +82,11 @@ void listfiles(const char *folderZrodlowy,const char *folderDocelowy)
 						}
 					}
 				}
+				/* Plik istnial w folderze docelowym */
 				else
 				{
 					time_t Czas2 = file2.st_mtime;
+					/* Porownywanie czasow ostatniej modyfikacji: jezeli plik w folderze docelowym jest nowszy: kopiujemy plik */
 					if (Czas1 > Czas2)
 					{
 						mode_t mode = file1.st_mode;
@@ -98,7 +109,7 @@ void listfiles(const char *folderZrodlowy,const char *folderDocelowy)
 			}
 			else
 			{
-				loggererr("Natrafiono na inny typ pliku.", 0);
+				loggererr("Natrafiono na nieznany typ pliku.", 0);
 			}
 		}
 	}
