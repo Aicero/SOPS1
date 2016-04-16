@@ -46,10 +46,8 @@ int nrmcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 	{
 		return errno;
 	}
-	char* bname;
-	bname = basename(pathDocelowy);
+
 	chmod(pathDocelowy, modeZrodlowy);
-	loggerparamerr("[read/write] Plik skopiowany do folderu docelowego.", bname, 0);
 	return 0;
 }
 
@@ -92,9 +90,6 @@ int memcopy(char* pathDocelowy, char* pathZrodlowy, time_t czasZrodlowy, mode_t 
 		return errno;
 	}
 
-	char* bname;
-	bname = basename(pathDocelowy);
 	chmod(pathDocelowy, modeZrodlowy);
-	loggerparamerr("[mmap/write] Plik skopiowany do folderu docelowego.", bname, 0);
 	return 0;
 }
