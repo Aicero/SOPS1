@@ -61,6 +61,9 @@ void lsfiles(const char *folderZrodlowy, const char *folderDocelowy)
 					if (nrmerr != 0) {
 						logparamerr("[read/write] Utworzenie pliku w katalogu docelowym nie powiodlo sie.", s_ZrodlowyRPath, nrmerr);
 					}
+					else if (nrmerr == -1) {
+						logparamerr("[read/write] Wystapil blad podczas kopiowania zawartosci pliku.", s_ZrodlowyRPath, 0);
+					}
 					else {
 						logparamerr("[read/write] Plik skopiowany do folderu docelowego.", s_DocelowyRPath, 0);
 					}
@@ -70,6 +73,9 @@ void lsfiles(const char *folderZrodlowy, const char *folderDocelowy)
 					int memerr = memcopy(s_DocelowyRPath, s_ZrodlowyRPath, time(NULL), _ZrodlowyFStruct.st_mode);
 					if (memerr != 0) {
 						logparamerr("[mmap/write] Utworzenie pliku w katalogu docelowym nie powiodlo sie.", s_ZrodlowyRPath, memerr);
+					}
+					else if (memerr == -1) {
+						logparamerr("[mmap/write] Wystapil blad podczas kopiowania zawartosci pliku.", s_ZrodlowyRPath, 0);
 					}
 					else {
 						logparamerr("[mmap/write] Plik skopiowany do folderu docelowego.", s_DocelowyRPath, 0);
