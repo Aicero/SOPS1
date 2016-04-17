@@ -50,7 +50,8 @@ void rmfiles(const char *folderZrodlowy, const char *folderDocelowy)
 		/* Sprawdzenie czy sciezka prowadzi do pliku */
 		else if (S_ISREG(_FileStruct.st_mode))
 		{	/* Jezeli plik nie istnieje w katalogu zrodlowym: usuwanie pliku */
-			if (access(s_ZrodlowyRPath, F_OK) == -1) {
+			if (lstat(s_ZrodlowyRPath, &_FileStruct) == -1) {
+			//if (access(s_ZrodlowyRPath, F_OK) == -1) { // zmienilem na lstat
 				/* Proba usuniecia pliku */
 				int rmverr = remove(s_DocelowyRPath);
 				if (rmverr != 0) {
@@ -64,7 +65,7 @@ void rmfiles(const char *folderZrodlowy, const char *folderDocelowy)
 		}
 		else {
 			/* Znaleziony plik jest innego typu, jezeli nie istnieje w katalogu zrodlowym, usuwamy go */
-			if (access(s_ZrodlowyRPath, F_OK) == -1) {
+			if (lstat(s_ZrodlowyRPath, &_FileStruct) == -1) {
 				/* Proba usuniecia pliku */
 				int rmverr = remove(s_DocelowyRPath);
 				if (rmverr != 0) {
