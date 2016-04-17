@@ -60,7 +60,13 @@ preplink :
 	touch TESTOWANIE/docel/pliczekdousuniecia TESTOWANIE/zrodlo/zdir1/pliczekwfolderze TESTOWANIE/docel/ddir2/aeggea
 	ln -s TESTOWANIE/docel/ddir/pliczekjakis TESTOWANIE/docel/ddir/linkdopliczku
 	ln -s TESTOWANIE/zrodlo/pl2 TESTOWANIE/zrodlo/zdir1/ldopl2
+	ln -s TESTOWANIE/zrodlo/pl3 TESTOWANIE/docel/linkacz 
+	ln -s TESTOWANIE/zrodlo/pl1 TESTOWANIE/zrodlo/linkacz 
 	dd if=/dev/zero of=TESTOWANIE/zrodlo/plmem4 bs=1 count=0 seek=12345
 	chmod 444 TESTOWANIE/zrodlo/plmem4
 	clear
 	ls -l -a TESTOWANIE/docel TESTOWANIE/zrodlo
+	
+cpl :
+	make clean
+	make preplink
