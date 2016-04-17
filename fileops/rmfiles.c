@@ -26,7 +26,7 @@ void rmfiles(const char *folderZrodlowy, const char *folderDocelowy)
 		cmbpath(s_ZrodlowyRPath, folderZrodlowy, ep->d_name);
 		cmbpath(s_DocelowyRPath, folderDocelowy, ep->d_name);
 
-		if (stat(s_DocelowyRPath, &_FileStruct) < 0) {
+		if (lstat(s_DocelowyRPath, &_FileStruct) < 0) {
 			logparamerr("Nieudana proba otwarcia pliku w folderze docelowym!", ep->d_name, errno);
 			continue;
 		}
@@ -38,7 +38,7 @@ void rmfiles(const char *folderZrodlowy, const char *folderDocelowy)
 		}
 		else if (S_ISDIR(_FileStruct.st_mode)) {
 			/* Jezeli folder nie istnieje w katalogu zrodlowym: usuwanie folderu wraz z zawartoscia */
-			if (stat(s_ZrodlowyRPath, &_FileStruct) == -1) {
+			if (lstat(s_ZrodlowyRPath, &_FileStruct) == -1) {
 				int rmverr = rmvdir(s_DocelowyRPath);
 				if (rmverr != 0) {
 					logparamerr("Blad usuwania elementu z folderu docelowego.", s_DocelowyRPath, rmverr);
@@ -63,7 +63,12 @@ void rmfiles(const char *folderZrodlowy, const char *folderDocelowy)
 			}
 		}
 		else {
-			logerr("Natrafiono na nieobslugiwany typ pliku podczas sprawdzania folderu DOCELOWEGO.", 0);
+			logparamerr(
+				(S_ISCHR(_FileStruct.st_mode)) ? "Natrafiono na \"character device\". Ignorowanie pliku." :
+				(S_ISBLK(_FileStruct.st_mode)) ? "Natrafiono na \"block device\". Ignorowanie pliku." :
+				(S_ISFIFO(_FileStruct.st_mode)) ? "Natrafiono na \"FIFO\". Ignorowanie pliku." :
+				(S_ISLNK(_FileStruct.st_mode)) ? "Natrafiono na \"symbolic link\". Ignorowanie pliku." :
+				(S_ISSOCK(_FileStruct.st_mode)) ? "Natrafiono na \"socket\". Ignorowanie pliku." :				
 		}
 	}
 	(void)closedir(dp);

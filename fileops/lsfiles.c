@@ -28,7 +28,7 @@ void lsfiles(const char *folderZrodlowy, const char *folderDocelowy)
 		cmbpath(s_ZrodlowyRPath, folderZrodlowy, ep->d_name);
 		cmbpath(s_DocelowyRPath, folderDocelowy, ep->d_name);
 
-		if (stat(s_ZrodlowyRPath, &_ZrodlowyFStruct) < 0) {
+		if (lstat(s_ZrodlowyRPath, &_ZrodlowyFStruct) < 0) {
 			logparamerr("Nieudana proba otwarcia pliku/folderu w folderze zrodlowym!", s_ZrodlowyRPath, errno);
 			continue;
 		}
@@ -40,7 +40,7 @@ void lsfiles(const char *folderZrodlowy, const char *folderDocelowy)
 		}
 		else if (S_ISDIR(_ZrodlowyFStruct.st_mode))	{
 			/* Jezeli folder nie istnieje w folderze docelowym - zostaje utworzony */
-			if (stat(s_DocelowyRPath, &_DocelowyFStruct) == -1) {
+			if (lstat(s_DocelowyRPath, &_DocelowyFStruct) == -1) {
 				/* Tworzenie folderu */
 				logparamerr("Rozpoczeto kopiowanie folderu.", s_DocelowyRPath, 0);
 				mkdir(s_DocelowyRPath, _ZrodlowyFStruct.st_mode);
@@ -54,7 +54,7 @@ void lsfiles(const char *folderZrodlowy, const char *folderDocelowy)
 		/* Sprawdzenie czy sciezka prowadzi do pliku */
 		else if (S_ISREG(_ZrodlowyFStruct.st_mode))	{
 			/* Sprawdzanie czy plik istnieje w katalogu docelowym: jezeli nie -> kopiujemy plik z folderu zrodlowego */
-			if (stat(s_DocelowyRPath, &_DocelowyFStruct) < 0) {
+			if (lstat(s_DocelowyRPath, &_DocelowyFStruct) < 0) {
 				if (g_progPodzialu == 0 || _ZrodlowyFStruct.st_size < (size_t)g_progPodzialu) {
 					/* Proba utworzenia pliku za pomoca [read/write] */
 					int nrmerr = nrmcopy(s_DocelowyRPath, s_ZrodlowyRPath, time(NULL), _ZrodlowyFStruct.st_mode);
@@ -109,7 +109,13 @@ void lsfiles(const char *folderZrodlowy, const char *folderDocelowy)
 			continue;
 		}
 		else {
-			logerr("Natrafiono na nieobslugiwany typ pliku.", 0);
+			logparamerr(
+				(S_ISCHR(_ZrodlowyFStruct.st_mode)) ? "Natrafiono na \"character device\". Ignorowanie pliku." :
+				(S_ISBLK(_ZrodlowyFStruct.st_mode)) ? "Natrafiono na \"block device\". Ignorowanie pliku." :
+				(S_ISFIFO(_ZrodlowyFStruct.st_mode)) ? "Natrafiono na \"FIFO\". Ignorowanie pliku." :
+				(S_ISLNK(_ZrodlowyFStruct.st_mode)) ? "Natrafiono na \"symbolic link\". Ignorowanie pliku." :
+				(S_ISSOCK(_ZrodlowyFStruct.st_mode)) ? "Natrafiono na \"socket\". Ignorowanie pliku." :				
+				"NIEZNANY RODZAJ PLIKU", s_ZrodlowyRPath, 0);
 		}
 	}
 	(void)closedir(dp);
