@@ -63,13 +63,23 @@ void rmfiles(const char *folderZrodlowy, const char *folderDocelowy)
 			}
 		}
 		else {
-			logparamerr(
-				(S_ISCHR(_FileStruct.st_mode)) ? "Natrafiono na \"character device\". Ignorowanie pliku." :
-				(S_ISBLK(_FileStruct.st_mode)) ? "Natrafiono na \"block device\". Ignorowanie pliku." :
-				(S_ISFIFO(_FileStruct.st_mode)) ? "Natrafiono na \"FIFO\". Ignorowanie pliku." :
-				(S_ISLNK(_FileStruct.st_mode)) ? "Natrafiono na \"symbolic link\". Ignorowanie pliku." :
-				(S_ISSOCK(_FileStruct.st_mode)) ? "Natrafiono na \"socket\". Ignorowanie pliku." :				
-				"NIEZNANY RODZAJ PLIKU", s_DocelowyRPath, 0);
+			/* Znaleziony plik jest innego typu, jezeli nie istnieje w katalogu zrodlowym, usuwamy go */
+			if (access(s_ZrodlowyRPath, F_OK) == -1) {
+				/* Proba usuniecia pliku */
+				int rmverr = remove(s_DocelowyRPath);
+				if (rmverr != 0) {
+					logparamerr("Blad usuwania pliku z folderu docelowego.", s_DocelowyRPath, rmverr);
+				}
+				else {
+					logparamerr(
+						(S_ISCHR(_FileStruct.st_mode)) ? "Usunieto plik \"character device\" nieobecny w folderze zrodlowym." :
+						(S_ISBLK(_FileStruct.st_mode)) ? "Usunieto plik \"block device\" nieobecny w folderze zrodlowym." :
+						(S_ISFIFO(_FileStruct.st_mode)) ? "Usunieto plik \"FIFO\" nieobecny w folderze zrodlowym." :
+						(S_ISLNK(_FileStruct.st_mode)) ? "Usunieto plik \"symbolic link\" nieobecny w folderze zrodlowym." :
+						(S_ISSOCK(_FileStruct.st_mode)) ? "Usunieto plik \"socket\" nieobecny w folderze zrodlowym." :				
+						"Usunieto NIEZNANY RODZAJ PLIKU.", s_DocelowyRPath, 0);
+				}
+			}
 		}
 	}
 	(void)closedir(dp);
