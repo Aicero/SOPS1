@@ -24,7 +24,7 @@ int nrmcopy(const char* pathDocelowy, const char* pathZrodlowy, time_t czasZrodl
 	while ((inputBytes = read(iZrodlowy, &buffer, BUF_SIZE)) > 0) {
 		outputBytes = write(iDocelowy, &buffer, (ssize_t)inputBytes);
 		if (outputBytes != inputBytes) {
-			return -1;
+			return 5;
 		}
 	}
 
