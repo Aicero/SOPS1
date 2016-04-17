@@ -95,7 +95,7 @@ void lsfiles(const char *folderZrodlowy, const char *folderDocelowy)
 					}
 					else {
 						/* Proba skopowania pliku za pomoca [mmap/write] */
-						int memerr = memcopy(s_DocelowyRPath, s_ZrodlowyRPath, Czas1, mode);
+						int memerr = memcopy(s_DocelowyRPath, s_ZrodlowyRPath, Czas1, _ZrodlowyFStruct.st_mode);
 						if (memerr != 0) {
 							logparamerr("[mmap/write] Blad kopiowania pliku do katalogu docelowego.", s_ZrodlowyRPath, memerr);
 						}
