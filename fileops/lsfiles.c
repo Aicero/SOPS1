@@ -58,22 +58,16 @@ void lsfiles(const char *folderZrodlowy, const char *folderDocelowy)
 				if (g_progPodzialu == 0 || _ZrodlowyFStruct.st_size < (size_t)g_progPodzialu) {
 					/* Proba utworzenia pliku za pomoca [read/write] */
 					int nrmerr = nrmcopy(s_DocelowyRPath, s_ZrodlowyRPath, time(NULL), _ZrodlowyFStruct.st_mode);
-					if (nrmerr != 0) {
-						logparamerr("[read/write] Utworzenie pliku w katalogu docelowym nie powiodlo sie.", s_ZrodlowyRPath, nrmerr);
-					}
-					else {
+					(nrmerr != 0) ?
+						logparamerr("[read/write] Utworzenie pliku w katalogu docelowym nie powiodlo sie.", s_ZrodlowyRPath, nrmerr) :
 						logparamerr("[read/write] Plik skopiowany do folderu docelowego.", s_DocelowyRPath, 0);
-					}
 				}
 				else {
 					/* Proba utworzenia pliku za pomoca [mmap/write] */
 					int memerr = memcopy(s_DocelowyRPath, s_ZrodlowyRPath, time(NULL), _ZrodlowyFStruct.st_mode);
-					if (memerr != 0) {
-						logparamerr("[mmap/write] Utworzenie pliku w katalogu docelowym nie powiodlo sie.", s_ZrodlowyRPath, memerr);
-					}
-					else {
+					(memerr != 0) ?
+						logparamerr("[mmap/write] Utworzenie pliku w katalogu docelowym nie powiodlo sie.", s_ZrodlowyRPath, memerr) :
 						logparamerr("[mmap/write] Plik skopiowany do folderu docelowego.", s_DocelowyRPath, 0);
-					}
 				}
 			}
 			else {	
@@ -86,22 +80,16 @@ void lsfiles(const char *folderZrodlowy, const char *folderDocelowy)
 					if (g_progPodzialu == 0 || _ZrodlowyFStruct.st_size < (size_t)g_progPodzialu) {
 						/* Proba skopiowania pliku za pomoca [read/write] */
 						int nrmerr = nrmcopy(s_DocelowyRPath, s_ZrodlowyRPath, Czas1, _ZrodlowyFStruct.st_mode);
-						if (nrmerr != 0) {
-							logparamerr("[read/write] Blad kopiowania pliku do katalogu docelowego.", s_ZrodlowyRPath, nrmerr);
-						}
-						else {
+						(nrmerr != 0) ?
+							logparamerr("[read/write] Blad kopiowania pliku do katalogu docelowego.", s_ZrodlowyRPath, nrmerr) :
 							logparamerr("[read/write] Plik skopiowany do folderu docelowego.", s_DocelowyRPath, 0);
-						}
 					}
 					else {
 						/* Proba skopowania pliku za pomoca [mmap/write] */
 						int memerr = memcopy(s_DocelowyRPath, s_ZrodlowyRPath, Czas1, _ZrodlowyFStruct.st_mode);
-						if (memerr != 0) {
-							logparamerr("[mmap/write] Blad kopiowania pliku do katalogu docelowego.", s_ZrodlowyRPath, memerr);
-						}
-						else {
+						(memerr != 0) ?
+							logparamerr("[mmap/write] Blad kopiowania pliku do katalogu docelowego.", s_ZrodlowyRPath, memerr) :
 							logparamerr("[mmap/write] Plik skopiowany do folderu docelowego.", s_DocelowyRPath, 0);
-						}
 					}
 				}
 			}

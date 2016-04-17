@@ -54,12 +54,9 @@ void rmfiles(const char *folderZrodlowy, const char *folderDocelowy)
 			//if (access(s_ZrodlowyRPath, F_OK) == -1) { // zmienilem na lstat
 				/* Proba usuniecia pliku */
 				int rmverr = remove(s_DocelowyRPath);
-				if (rmverr != 0) {
-					logparamerr("Blad usuwania pliku z folderu docelowego.", s_DocelowyRPath, rmverr);
-				}
-				else {
+				(rmverr != 0) ?
+					logparamerr("Blad usuwania pliku z folderu docelowego.", s_DocelowyRPath, rmverr) :
 					logparamerr("Usunieto plik nieobecny w folderze zrodlowym.", s_DocelowyRPath, 0);
-				}
 				continue;
 			}
 		}
@@ -68,10 +65,8 @@ void rmfiles(const char *folderZrodlowy, const char *folderDocelowy)
 			if (lstat(s_ZrodlowyRPath, &_FileStruct) == -1) {
 				/* Proba usuniecia pliku */
 				int rmverr = remove(s_DocelowyRPath);
-				if (rmverr != 0) {
-					logparamerr("Blad usuwania pliku z folderu docelowego.", s_DocelowyRPath, rmverr);
-				}
-				else {
+				(rmverr != 0) ?
+					logparamerr("Blad usuwania pliku z folderu docelowego.", s_DocelowyRPath, rmverr) :
 					logparamerr(
 						(S_ISCHR(_FileStruct.st_mode)) ? "Usunieto plik \"character device\" nieobecny w folderze zrodlowym." :
 						(S_ISBLK(_FileStruct.st_mode)) ? "Usunieto plik \"block device\" nieobecny w folderze zrodlowym." :
@@ -79,7 +74,6 @@ void rmfiles(const char *folderZrodlowy, const char *folderDocelowy)
 						(S_ISLNK(_FileStruct.st_mode)) ? "Usunieto plik \"symbolic link\" nieobecny w folderze zrodlowym." :
 						(S_ISSOCK(_FileStruct.st_mode)) ? "Usunieto plik \"socket\" nieobecny w folderze zrodlowym." :				
 						"Usunieto NIEZNANY RODZAJ PLIKU.", s_DocelowyRPath, 0);
-				}
 			}
 		}
 	}
