@@ -15,7 +15,7 @@ void rmfiles(const char *folderZrodlowy, const char *folderDocelowy)
 	}
 
 	while (ep = readdir(dp)) {
-		if (!strcmp(ep->d_name, ".") || !strcmp(ep->d_name, "..")) {
+		if (!strcmp(ep->d_name, ".") || !strcmp(ep->d_name, "..") /*|| ep->d_name[strlen(ep->d_name)-1] != '~'*/) {
 			/* Katalogi specjalne: . , .. zostana pominiete */
 			continue;
 		}
