@@ -40,3 +40,13 @@ ls :
 	ls -l -a TESTOWANIE/docel TESTOWANIE/zrodlo
 chmod :
 	chmod 444 TESTOWANIE/zrodlo/pl1
+prepdur :
+	chmod -f -R 777 TESTOWANIE || : echo Folder nie istnieje
+	rm -rf TESTOWANIE/zrodlo/*
+	rm -rf TESTOWANIE/docel/*
+	mkdir -p TESTOWANIE/zrodlo/zdir1 TESTOWANIE/zrodlo/zdir2 TESTOWANIE/docel/ddir TESTOWANIE/docel/ddir2
+	touch TESTOWANIE/zrodlo/pl1 TESTOWANIE/zrodlo/.plikukryty TESTOWANIE/zrodlo/pl2 TESTOWANIE/zrodlo/pl3 TESTOWANIE/docel/ddir/pliczekjakis TESTOWANIE/docel/ddir/ageagegeaageaggae
+	touch TESTOWANIE/docel/pliczekdousuniecia TESTOWANIE/zrodlo/zdir1/pliczekwfolderze TESTOWANIE/docel/ddir2/aeggea
+	dd if=/dev/zero of=TESTOWANIE/zrodlo/plmem4 bs=1 count=0 seek=12345
+	chmod 444 TESTOWANIE/zrodlo/plmem4
+	
