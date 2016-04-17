@@ -69,6 +69,7 @@ void rmfiles(const char *folderZrodlowy, const char *folderDocelowy)
 				(S_ISFIFO(_FileStruct.st_mode)) ? "Natrafiono na \"FIFO\". Ignorowanie pliku." :
 				(S_ISLNK(_FileStruct.st_mode)) ? "Natrafiono na \"symbolic link\". Ignorowanie pliku." :
 				(S_ISSOCK(_FileStruct.st_mode)) ? "Natrafiono na \"socket\". Ignorowanie pliku." :				
+				"NIEZNANY RODZAJ PLIKU", s_DocelowyRPath, 0);
 		}
 	}
 	(void)closedir(dp);
