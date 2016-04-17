@@ -35,7 +35,7 @@ void lsfiles(const char *folderZrodlowy, const char *folderDocelowy)
 
 		/* Sprawdzenie czy sciezka prowadzi do folderu, oraz czy rekurencja == True */
 		if (S_ISDIR(_ZrodlowyFStruct.st_mode) && !(flags & RECURRENCY)) {
-			/* Foldery przy wyłączonej rekurencji są pomijane */
+			/* Foldery przy wylaczonej rekurencji sa pomijane */
 			continue;
 		}
 		else if (S_ISDIR(_ZrodlowyFStruct.st_mode))	{
@@ -53,7 +53,7 @@ void lsfiles(const char *folderZrodlowy, const char *folderDocelowy)
 
 		/* Sprawdzenie czy sciezka prowadzi do pliku */
 		else if (S_ISREG(_ZrodlowyFStruct.st_mode))	{
-			/* Sprawdzanie czy plik istenieje w katalogu docelowym: jezeli nie -> kopiujemy plik z folderu zrodlowego */
+			/* Sprawdzanie czy plik istnieje w katalogu docelowym: jezeli nie -> kopiujemy plik z folderu zrodlowego */
 			if (stat(s_DocelowyRPath, &_DocelowyFStruct) < 0) {
 				if (g_progPodzialu == 0 || _ZrodlowyFStruct.st_size < (size_t)g_progPodzialu) {
 					/* Proba utworzenia pliku za pomoca [read/write] */

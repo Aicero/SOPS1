@@ -139,7 +139,7 @@ int main(int argc, char * argv[]) {
 			else {
 				logerr("Demon wybudzony przez SIGUSR1.", 0);
 				/* Ustawienie flagi SYNCHRONIZATION */
-				flags |= SYNCHRONIZATION; // ustawienie flagi SYNCHRONIZATION
+				flags |= SYNCHRONIZATION;
 				/* Rozpoczecie dzialania na folderach */
 				lsfiles(g_pathZrodlowy, g_pathDocelowy);
 				rmfiles(g_pathZrodlowy, g_pathDocelowy);
