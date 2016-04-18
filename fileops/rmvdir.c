@@ -7,7 +7,7 @@ int unlinkthis(const char *fpath, const struct stat *sb, int tflag, struct FTW *
 	char* message;
 	int rv = remove(fpath);
 	if (rv) {
-		return rv;
+		return rv; // dokad to wraca? nie wiem czy nie trzeba tutaj po prostu zalogować bledu ;/
 	}
 	
 	logparamerr(
@@ -27,7 +27,7 @@ int rmvdir(char *path)
 	flags |= FTW_PHYS;
 
 	if (nftw(path, unlinkthis, 64, flags) == -1) {
-		perror("nftw");
+		return errno;
 	}
 	return 0;
 }
