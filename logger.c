@@ -21,6 +21,7 @@ void logerr(const char* message, const int err) {
 			fprintf(stderr, "%s %s\n", currentTime, message);
 		}
 	}
+	free(currentTime);
 }
 
 /*
@@ -46,4 +47,5 @@ void logparamerr(const char* message, const char* sParam, const int err) {
 			fprintf(stderr, "%s %s\n Parametr: %s\n", currentTime, message, sParam);
 		}
 	}
+	free(currentTime);
 }
