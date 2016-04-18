@@ -5,7 +5,7 @@
 int unlinkthis(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf)
 {
 	if(tflag == FTW_DNR) { 
-		logparamerr("Wystapil blad podczas proby odczytania folderu. Kontynuowanie usuwania folderu.", fpath, 0);
+		logparamerr("Wystapil blad podczas proby odczytania jednego z folderow przeznaczonych do usuwania. Proba kontynuacji...", fpath, 0);
 		return 0;
 	}
 	char* message;
