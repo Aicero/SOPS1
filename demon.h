@@ -65,8 +65,11 @@ enum {
 	VERBOSE = 1 << 2,
 	#define VERBOSE VERBOSE
 
-	RECURRENCY = 1 << 3
+	RECURRENCY = 1 << 3,
 	#define RECURRENCY RECURRENCY
+	
+	FLAG_KILL = 1 << 4
+	#define FLAG_KILL FLAG_KILL
 };
 
 /* DEMON FLAGS & GLOBAL VALUES */

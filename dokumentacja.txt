@@ -29,7 +29,7 @@ Komendy, pomocne przy testowaniu:
  - 'make cleanprep' - użycie komend 'make clean' 'make prep'
  - 'make cleandur' - usunięcie zawartości folderów źródłowego i docelowego oraz przygotowanie plików do testowania
  - 'make preplink' - przygotowanie plików do testu z linkami symbolicznymi
- - 'make cpl' - użycie koment 'make clean' i 'make preplink'
+ - 'make cpl' - użycie komend 'make clean' i 'make preplink'
  - 'make ls' - użycie ls -l -a na folderach testowych
  - 'make sig' - wybudzenie demona przy pomocy sygnału SIGUSR1
  - 'make kill' - zabicie procesu demona
