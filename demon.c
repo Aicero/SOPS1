@@ -117,7 +117,11 @@ int main(int argc, char * argv[]) {
 			signal(SIGUSR1, sigusrhandler);
 
 			if (!opendir(g_pathZrodlowy) || !opendir(g_pathDocelowy)) {
-				logerr("Otwarcie folderu zrodlowego lub docelowego nie powiodlo sie. Demon umarl.", errno);
+				logerr(
+					!opendir(g_pathZrodlowy) ? 
+					"Otwarcie folderu zrodlowego nie powiodlo sie. Demon umarl." :
+					"Otwarcie folderu docelowego nie powiodlo sie. Demon umarl." 
+					, errno);
 				exit(EXIT_FAILURE);
 			}
 

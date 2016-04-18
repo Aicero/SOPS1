@@ -10,13 +10,12 @@ int nrmcopy(const char* pathDocelowy, const char* pathZrodlowy, time_t czasZrodl
 
 	/* Tworzenie deskryptorow */
 	iZrodlowy = open(pathZrodlowy, O_RDONLY);
-	if (iZrodlowy == -1) {
-		return errno;
-	}
+	if (iZrodlowy == -1) { return errno; }
 
 	/* Tworzenie deskryptorow */
 	iDocelowy = open(pathDocelowy, O_WRONLY | O_TRUNC | O_CREAT, 777);
 	if (iDocelowy == -1) {
+		if (close(iZrodlowy) < 0) { return errno; }
 		return errno;
 	}
 
@@ -24,22 +23,21 @@ int nrmcopy(const char* pathDocelowy, const char* pathZrodlowy, time_t czasZrodl
 	while ((inputBytes = read(iZrodlowy, &buffer, BUF_SIZE)) > 0) {
 		outputBytes = write(iDocelowy, &buffer, (ssize_t)inputBytes);
 		if (outputBytes != inputBytes) {
+			if (close(iZrodlowy) < 0) {	return errno; }
+			if (close(iDocelowy) < 0) { return errno; }
 			return 5;
 		}
 	}
 
 	/* Zamykanie deskryptorow */
-	close(iZrodlowy);
-	close(iDocelowy);
+	if (close(iZrodlowy) < 0) { return errno; }
+	if (close(iDocelowy) < 0) { return errno; }
 
 	/* Ustawianie czasu modyfikacji */
 	struct utimbuf nowy_czas;
 	nowy_czas.modtime = czasZrodlowy;
-	if (utime(pathDocelowy, &nowy_czas) < 0) {
-		return errno;
-	}
-
-	chmod(pathDocelowy, modeZrodlowy);
+	if (utime(pathDocelowy, &nowy_czas) < 0) { return errno; }
+	if (chmod(pathDocelowy, modeZrodlowy) < 0) { return errno; }
 	return 0;
 }
 
@@ -55,44 +53,41 @@ int memcopy(const char* pathDocelowy, const char* pathZrodlowy, time_t czasZrodl
 	size_t filesize;
 
 	/* Zrodlo */
-	if (stat(pathZrodlowy, &s) != 0) {
-		return errno;
-	}
+	if (stat(pathZrodlowy, &s) != 0) { return errno; }
 	
 	filesize = s.st_size;
 
 	/* Tworzenie deskryptorow */
 	iZrodlowy = open(pathZrodlowy, O_RDONLY);
-	if (iZrodlowy == -1) {
-		return errno;
-	}
+	if (iZrodlowy == -1) { return errno; }
 
 	/* Tworzenie deskryptorow */
 	iDocelowy = open(pathDocelowy, O_WRONLY | O_TRUNC | O_CREAT, 777);
 	if (iDocelowy == -1) {
+		if(close(iZrodlowy) < 0) { return errno; }
 		return errno;
 	}
 
-	ftruncate(iDocelowy, filesize);
+	if(ftruncate(iDocelowy, filesize) < 0) { return errno; }
 
 	source = mmap(NULL, filesize, PROT_READ, MAP_PRIVATE, iZrodlowy, 0);
 	if (source == MAP_FAILED) {
+		if(close(iZrodlowy) < 0) { return errno; }
+		if(close(iDocelowy) < 0) { return errno; }
 		return errno;
 	}
 
 	/* Kopiowanie */
-	write(iDocelowy, source, filesize);
-	munmap(source, filesize);
-	close(iZrodlowy);
-	close(iDocelowy);
+	if (write(iDocelowy, source, filesize) < 0) { return errno; }
+	if (munmap(source, filesize) < 0) { return errno; }
+	if (close(iZrodlowy) < 0) { return errno; }
+	if (close(iDocelowy) < 0) { return errno; }
 
 	/* Ustawianie czasu modyfikacji */
 	struct utimbuf nowy_czas;
 	nowy_czas.modtime = czasZrodlowy;
-	if (utime(pathDocelowy, &nowy_czas) < 0) {
-		return errno;
-	}
-
-	chmod(pathDocelowy, modeZrodlowy);
+	
+	if (utime(pathDocelowy, &nowy_czas) < 0) { return errno; }
+	if (chmod(pathDocelowy, modeZrodlowy) < 0) { return errno; }
 	return 0;
 }
