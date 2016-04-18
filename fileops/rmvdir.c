@@ -8,7 +8,7 @@ int unlinkthis(const char *fpath, const struct stat *sb, int tflag, struct FTW *
 		logparamerr("Wystapil blad podczas proby odczytania jednego z folderow przeznaczonych do usuwania. Proba kontynuacji...", fpath, 0);
 		return 0;
 	}
-	char* message;
+
 	int rv = remove(fpath);
 	if (rv) {
 		return rv;
