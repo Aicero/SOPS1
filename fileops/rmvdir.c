@@ -7,7 +7,7 @@ int unlinkthis(const char *fpath, const struct stat *sb, int tflag, struct FTW *
 	char* message;
 	int rv = remove(fpath);
 	if (rv) {
-		return rv; // dokad to wraca? nie wiem czy nie trzeba tutaj po prostu zalogować bledu ;/
+		return rv;
 	}
 	
 	logparamerr(
