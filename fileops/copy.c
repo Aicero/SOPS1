@@ -82,7 +82,7 @@ int memcopy(const char* pathDocelowy, const char* pathZrodlowy, time_t czasZrodl
 	if (munmap(source, filesize) < 0) { return errno; }
 	if (close(iZrodlowy) < 0) { return errno; }
 	if (close(iDocelowy) < 0) { return errno; }
-
+	free(source);
 	/* Ustawianie czasu modyfikacji */
 	struct utimbuf nowy_czas;
 	nowy_czas.modtime = czasZrodlowy;
