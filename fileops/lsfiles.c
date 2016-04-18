@@ -105,7 +105,6 @@ void lsfiles(const char *folderZrodlowy, const char *folderDocelowy)
 				(S_ISSOCK(_ZrodlowyFStruct.st_mode)) ? "Natrafiono na \"socket\". Ignorowanie pliku." :				
 				"NIEZNANY RODZAJ PLIKU", s_ZrodlowyRPath, 0);
 		}
-		free(ep);
 	}
 	(void)closedir(dp);
 }
