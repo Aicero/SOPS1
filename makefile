@@ -10,13 +10,13 @@ sig :
 	killall -SIGUSR1 dem
 
 test :
-	./dem TESTOWANIE/zrodlo TESTOWANIE/docel -T 3 -S 2
+	./dem TESTOWANIE/zrodlo TESTOWANIE/docel -T 3
 	
 testrek :
-	./dem TESTOWANIE/zrodlo TESTOWANIE/docel -R -T 3 -S 2
+	./dem TESTOWANIE/zrodlo TESTOWANIE/docel -R -T 3 -S 300
 
 testverb :
-	./dem TESTOWANIE/zrodlo TESTOWANIE/docel -r -t 3 -v -s 3
+	./dem TESTOWANIE/zrodlo TESTOWANIE/docel -r -t 3 -v -s 300
 	clear
 
 cleanprep :

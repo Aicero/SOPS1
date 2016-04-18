@@ -1,8 +1,6 @@
 void signalhandler(int signum) {
 	if (signum == SIGTERM) {
-		closelog();
-		logerr("Zakonczono dzialanie demona. [kill]", 0);
-		exit(signum);
+		flags |= FLAG_KILL;
 	}
 }
 

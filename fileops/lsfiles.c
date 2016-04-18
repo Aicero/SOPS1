@@ -76,20 +76,20 @@ void lsfiles(const char *folderZrodlowy, const char *folderDocelowy)
 				time_t Czas2 = _DocelowyFStruct.st_mtime;
 				
 				/* Porownywanie czasow ostatniej modyfikacji: jezeli plik w folderze docelowym jest nowszy: kopiujemy plik */
-				if (Czas1 > Czas2) {
+				if (Czas1 != Czas2) {
 					if (g_progPodzialu == 0 || _ZrodlowyFStruct.st_size < (size_t)g_progPodzialu) {
 						/* Proba skopiowania pliku za pomoca [read/write] */
 						int nrmerr = nrmcopy(s_DocelowyRPath, s_ZrodlowyRPath, Czas1, _ZrodlowyFStruct.st_mode);
 						(nrmerr != 0) ?
-							logparamerr("[read/write] Blad kopiowania pliku do katalogu docelowego.", s_ZrodlowyRPath, nrmerr) :
-							logparamerr("[read/write] Plik skopiowany do folderu docelowego.", s_DocelowyRPath, 0);
+							logparamerr("[read/write] Daty modyfikacji byly rozne. Blad kopiowania pliku do katalogu docelowego.", s_ZrodlowyRPath, nrmerr) :
+							logparamerr("[read/write] Daty modyfikacji byly rozne. Plik skopiowany do folderu docelowego.", s_DocelowyRPath, 0);
 					}
 					else {
 						/* Proba skopowania pliku za pomoca [mmap/write] */
 						int memerr = memcopy(s_DocelowyRPath, s_ZrodlowyRPath, Czas1, _ZrodlowyFStruct.st_mode);
 						(memerr != 0) ?
-							logparamerr("[mmap/write] Blad kopiowania pliku do katalogu docelowego.", s_ZrodlowyRPath, memerr) :
-							logparamerr("[mmap/write] Plik skopiowany do folderu docelowego.", s_DocelowyRPath, 0);
+							logparamerr("[mmap/write] Daty modyfikacji byly rozne. Blad kopiowania pliku do katalogu docelowego.", s_ZrodlowyRPath, memerr) :
+							logparamerr("[mmap/write] Daty modyfikacji byly rozne. Plik skopiowany do folderu docelowego.", s_DocelowyRPath, 0);
 					}
 				}
 			}

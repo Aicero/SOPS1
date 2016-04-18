@@ -130,6 +130,13 @@ int main(int argc, char * argv[]) {
 				continue;
 			}
 
+			if (flags & FLAG_KILL) {
+				/* Wywolywane jezeli demon nie jest w trakcie synchronizacji plikow */
+				closelog();
+				logerr("Zakonczono dzialanie demona. [kill]", 0);
+				exit(0);
+			}
+			
 			if (!(flags & FLAG_SIGNAL)) {
 				logerr("Demon wybudzony automatycznie.", 0);
 				/* Ustawienie flagi SYNCHRONIZATION */
@@ -152,7 +159,7 @@ int main(int argc, char * argv[]) {
 				/* Wylaczenie flagi FLAG_SIGNAL */				
 				flags &= ~FLAG_SIGNAL;
 			}
-
+			
 			logerr("Demon zostal uspiony.", 0);
 			/* Uspienie na okreslony czas */
 			sleep(g_refreshTime);
